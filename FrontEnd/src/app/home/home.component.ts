@@ -68,4 +68,7 @@ export class HomeComponent implements OnInit {
     // this.router.navigate(['/contact']);
   }
 
+      goToApplicationForm() {
+    this.router.navigate(['/application']);
+  }
 }
