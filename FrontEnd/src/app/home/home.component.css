@@ -158,3 +158,125 @@
 .hero-image img:hover {
   transform: scale(1.05);
 }
+
+/* Benefits Section Styles */
+.benefits {
+  padding: 4rem 0;
+  background-color: #f8f9fa;
+}
+
+.benefits h2 {
+  color: #333;
+  margin-bottom: 3rem;
+  font-size: 2.2rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.benefit-card {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+  transition: all 0.3s ease;
+}
+
+.benefit-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.benefit-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.benefit-card h3 {
+  color: #0d6efd;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.benefit-card p {
+  color: #6c757d;
+  line-height: 1.6;
+}
+
+/* Quick Links Section Styles */
+.quick-links {
+  padding: 4rem 0;
+  background-color: white;
+}
+
+.quick-links h2 {
+  color: #333;
+  margin-bottom: 3rem;
+  font-size: 2.2rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.quick-links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.quick-link-card {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 2.5rem;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.quick-link-card:hover {
+  transform: translateY(-5px);
+  border-color: #0d6efd;
+  box-shadow: 0 8px 25px rgba(13, 110, 253, 0.2);
+}
+
+.quick-link-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.quick-link-card h3 {
+  color: #0d6efd;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.quick-link-card p {
+  color: #6c757d;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.quick-link-btn {
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.quick-link-btn:hover {
+  background-color: #0b5ed7;
+}

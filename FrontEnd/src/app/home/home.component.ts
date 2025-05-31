@@ -30,6 +30,13 @@ export class HomeComponent implements OnInit {
     // this.router.navigate(['/track']);
   }
 
+  
+  downloadPdf() {
+    console.log('Download PDF button clicked');
+    // Add download logic here
+  }
+
+
   login() {
     console.log('Login button clicked');
     // Navigate to login page
