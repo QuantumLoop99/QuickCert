@@ -43,4 +43,29 @@ export class HomeComponent implements OnInit {
     // this.router.navigate(['/login']);
   }
 
+  // Footer navigation methods
+  navigateToPrivacyPolicy() {
+    console.log('Privacy Policy clicked');
+    // Navigate to privacy policy page
+    // this.router.navigate(['/privacy-policy']);
+  }
+
+  navigateToTerms() {
+    console.log('Terms of Service clicked');
+    // Navigate to terms page
+    // this.router.navigate(['/terms']);
+  }
+
+  navigateToFAQ() {
+    console.log('FAQ clicked');
+    // Navigate to FAQ page
+    // this.router.navigate(['/faq']);
+  }
+
+  navigateToContact() {
+    console.log('Contact Us clicked');
+    // Navigate to contact page
+    // this.router.navigate(['/contact']);
+  }
+
 }
