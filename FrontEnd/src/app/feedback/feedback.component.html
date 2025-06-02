@@ -1,0 +1,271 @@
+<!-- Header -->
+<header class="header">
+  <div class="logo">QuickCert</div>
+  <nav class="navigation">
+    <a href="#" class="nav-link">Home</a>
+    <a href="#" class="nav-link">About</a>
+    <a href="#" class="nav-link">Contact</a>
+    <a href="#" class="nav-link active">FeedBack</a>
+    <a href="#" class="nav-link">FAQ</a>
+  </nav>
+  <button class="sign-in-button">Sign In</button>
+</header>
+
+<!-- Feedback Hero Section -->
+<section class="feedback-hero">
+  <div class="container">
+    <div class="feedback-hero-content">
+      <h1>Your Feedback Matters</h1>
+      <h2>Help Us Improve QuickCert Services</h2>
+      <p>Share your experience with our online income statement requesting system. Your valuable feedback helps us enhance our services and provide better solutions for all citizens.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Feedback Form Section -->
+<section class="feedback-section">
+  <div class="container">
+    <div class="feedback-container">
+      <div class="feedback-form-wrapper">
+        <h2>Rate Your Experience</h2>
+        
+        <!-- Overall Rating -->
+        <div class="rating-section">
+          <h3>Overall Satisfaction</h3>
+          <div class="star-rating">
+            <span class="star" data-rating="1">★</span>
+            <span class="star" data-rating="2">★</span>
+            <span class="star" data-rating="3">★</span>
+            <span class="star" data-rating="4">★</span>
+            <span class="star" data-rating="5">★</span>
+          </div>
+          <p class="rating-text">Click to rate your overall experience</p>
+        </div>
+
+        <!-- Service Categories Rating -->
+        <div class="categories-rating">
+          <div class="category-item">
+            <h4>Ease of Use</h4>
+            <div class="star-rating category-rating" data-category="ease">
+              <span class="star" data-rating="1">★</span>
+              <span class="star" data-rating="2">★</span>
+              <span class="star" data-rating="3">★</span>
+              <span class="star" data-rating="4">★</span>
+              <span class="star" data-rating="5">★</span>
+            </div>
+          </div>
+
+          <div class="category-item">
+            <h4>Processing Speed</h4>
+            <div class="star-rating category-rating" data-category="speed">
+              <span class="star" data-rating="1">★</span>
+              <span class="star" data-rating="2">★</span>
+              <span class="star" data-rating="3">★</span>
+              <span class="star" data-rating="4">★</span>
+              <span class="star" data-rating="5">★</span>
+            </div>
+          </div>
+
+          <div class="category-item">
+            <h4>Customer Support</h4>
+            <div class="star-rating category-rating" data-category="support">
+              <span class="star" data-rating="1">★</span>
+              <span class="star" data-rating="2">★</span>
+              <span class="star" data-rating="3">★</span>
+              <span class="star" data-rating="4">★</span>
+              <span class="star" data-rating="5">★</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feedback Form -->
+        <form class="feedback-form">
+          <div class="form-group">
+            <label for="user-type">I am a:</label>
+            <select id="user-type" name="userType" class="form-control">
+              <option value="">Select your role</option>
+              <option value="citizen">Citizen/Pensioner</option>
+              <option value="officer">Divisional Officer</option>
+              <option value="admin">Administrator</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="service-used">Service Used:</label>
+            <select id="service-used" name="serviceUsed" class="form-control">
+              <option value="">Select service</option>
+              <option value="income-statement">Income Statement Request</option>
+              <option value="document-verification">Document Verification</option>
+              <option value="status-tracking">Request Tracking</option>
+              <option value="account-management">Account Management</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="feedback-text">Your Feedback:</label>
+            <textarea 
+              id="feedback-text" 
+              name="feedbackText" 
+              class="form-control textarea"
+              rows="6"
+              placeholder="Please share your detailed feedback, suggestions, or any issues you encountered while using QuickCert..."
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="suggestions">Suggestions for Improvement:</label>
+            <textarea 
+              id="suggestions" 
+              name="suggestions" 
+              class="form-control textarea"
+              rows="4"
+              placeholder="What features or improvements would you like to see in QuickCert?"
+            ></textarea>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" name="contactPermission">
+              <span class="checkmark"></span>
+              Allow us to contact you for follow-up regarding your feedback
+            </label>
+          </div>
+
+          <div class="form-group contact-info" style="display: none;">
+            <label for="contact-email">Email Address:</label>
+            <input 
+              type="email" 
+              id="contact-email" 
+              name="contactEmail" 
+              class="form-control"
+              placeholder="your.email@example.com"
+            >
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn secondary-btn">Clear Form</button>
+            <button type="submit" class="btn primary-btn">Submit Feedback</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Feedback Stats Sidebar -->
+      <div class="feedback-stats">
+        <h3>Community Feedback</h3>
+        
+        <div class="stat-card">
+          <div class="stat-number">4.8</div>
+          <div class="stat-label">Average Rating</div>
+          <div class="stat-stars">★★★★★</div>
+        </div>
+
+        <div class="stat-item">
+          <span class="stat-title">Total Reviews</span>
+          <span class="stat-value">2,847</span>
+        </div>
+
+        <div class="stat-item">
+          <span class="stat-title">This Month</span>
+          <span class="stat-value">284</span>
+        </div>
+
+        <div class="rating-breakdown">
+          <div class="rating-bar">
+            <span class="rating-label">5 ★</span>
+            <div class="bar">
+              <div class="fill" style="width: 78%"></div>
+            </div>
+            <span class="rating-percent">78%</span>
+          </div>
+          <div class="rating-bar">
+            <span class="rating-label">4 ★</span>
+            <div class="bar">
+              <div class="fill" style="width: 15%"></div>
+            </div>
+            <span class="rating-percent">15%</span>
+          </div>
+          <div class="rating-bar">
+            <span class="rating-label">3 ★</span>
+            <div class="bar">
+              <div class="fill" style="width: 5%"></div>
+            </div>
+            <span class="rating-percent">5%</span>
+          </div>
+          <div class="rating-bar">
+            <span class="rating-label">2 ★</span>
+            <div class="bar">
+              <div class="fill" style="width: 1%"></div>
+            </div>
+            <span class="rating-percent">1%</span>
+          </div>
+          <div class="rating-bar">
+            <span class="rating-label">1 ★</span>
+            <div class="bar">
+              <div class="fill" style="width: 1%"></div>
+            </div>
+            <span class="rating-percent">1%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Recent Testimonials Section -->
+<section class="testimonials">
+  <div class="container">
+    <h2>What Our Users Say</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-rating">★★★★★</div>
+        <p>"QuickCert made the entire process so simple. I got my income statement within 2 days without visiting any office!"</p>
+        <div class="testimonial-author">- Citizen, Colombo</div>
+      </div>
+      
+      <div class="testimonial-card">
+        <div class="testimonial-rating">★★★★★</div>
+        <p>"As a divisional officer, this system has significantly reduced our workload and improved efficiency."</p>
+        <div class="testimonial-author">- Divisional Officer</div>
+      </div>
+      
+      <div class="testimonial-card">
+        <div class="testimonial-rating">★★★★☆</div>
+        <p>"Great system overall. The notification system keeps me updated on every step of the process."</p>
+        <div class="testimonial-author">- Pensioner, Kandy</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3>QuickCert</h3>
+      <p>Fast, reliable, and secure online income statement requesting system for Sri Lankan citizens.</p>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ & Help</a>
+        <a href="#">Contact Us</a>
+      </div>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Contact Info</h4>
+      <div class="contact-info">
+        <p>Email: supportquickcert.gov.lk</p>
+        <p>Phone: +94 11 234 5678</p>
+        <p>Address: Colombo, Sri Lanka</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <p class="copyright">© 2025 QuickCert. All rights reserved. | Government of Sri Lanka</p>
+  </div>
+</footer>
