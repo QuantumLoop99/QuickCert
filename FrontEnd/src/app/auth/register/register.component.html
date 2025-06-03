@@ -1,0 +1,43 @@
+<div class="register-container">
+  <h2>Register to QuickCert</h2>
+  
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <label for="role">Register as</label>
+    <select id="role" formControlName="role" required>
+      <option value="" disabled selected>Select Role</option>
+      <option value="citizen">Citizen</option>
+      <option value="officer">Officer</option>
+      <option value="admin">Admin</option>
+    </select>
+    <div *ngIf="submitted && registerForm.controls['role'].errors" class="error">Role is required.</div>
+
+    <label for="nic">NIC</label>
+    <input id="nic" type="text" formControlName="nic" placeholder="Enter NIC">
+    <div *ngIf="submitted && registerForm.controls['nic'].errors" class="error">NIC is required.</div>
+
+    <label for="fullname">Full Name</label>
+    <input id="fullname" type="text" formControlName="fullname" placeholder="Enter full name">
+    <div *ngIf="submitted && registerForm.controls['fullname'].errors" class="error">Full name is required.</div>
+
+    <label for="email">Email</label>
+    <input id="email" type="email" formControlName="email" placeholder="Enter email">
+    <div *ngIf="submitted && registerForm.controls['email'].errors" class="error">Valid email is required.</div>
+
+    <label for="password">Password</label>
+    <input id="password" type="password" formControlName="password" placeholder="Enter password">
+    <div *ngIf="submitted && registerForm.controls['password'].errors" class="error">Password is required (min 6 chars).</div>
+
+    <label for="confirmPassword">Confirm Password</label>
+    <input id="confirmPassword" type="password" formControlName="confirmPassword" placeholder="Confirm password">
+    <div *ngIf="submitted && registerForm.controls['confirmPassword'].errors" class="error">Passwords must match.</div>
+
+    <button type="submit">Register</button>
+  </form>
+
+  <p *ngIf="successMessage" class="success">{{ successMessage }}</p>
+  <p class="login-link">
+  Already have an account?
+  <a routerLink="/login">Log in</a>
+  </p>
+
+</div>

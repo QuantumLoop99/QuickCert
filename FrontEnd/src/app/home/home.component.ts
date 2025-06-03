@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit {
   login() {
     console.log('Login button clicked');
     // Navigate to login page
-    // this.router.navigate(['/login']);
+    this.router.navigate(['/login']);
   }
 
   // Footer navigation methods
