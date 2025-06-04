@@ -3,6 +3,10 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+<<<<<<< HEAD
+=======
+    "outDir": "./dist/out-tsc",
+>>>>>>> origin/development
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -10,15 +14,25 @@
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
     "isolatedModules": true,
+<<<<<<< HEAD
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "ES2022",
     "module": "preserve"
+=======
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "bundler",
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "ES2022"
+>>>>>>> origin/development
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
+<<<<<<< HEAD
     "typeCheckHostBindings": true,
     "strictTemplates": true
   },
@@ -31,4 +45,8 @@
       "path": "./tsconfig.spec.json"
     }
   ]
+=======
+    "strictTemplates": true
+  }
+>>>>>>> origin/development
 }

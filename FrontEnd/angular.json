@@ -11,9 +11,11 @@
       "prefix": "app",
       "architect": {
         "build": {
+
           "builder": "@angular/build:application",
           "options": {
             "browser": "src/main.ts",
+
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
@@ -23,7 +25,10 @@
             ],
             "styles": [
               "src/styles.css"
-            ]
+
+            ],
+            "scripts": []
+
           },
           "configurations": {
             "production": {
@@ -50,7 +55,9 @@
           "defaultConfiguration": "production"
         },
         "serve": {
+
           "builder": "@angular/build:dev-server",
+
           "configurations": {
             "production": {
               "buildTarget": "FrontEnd:build:production"
@@ -62,11 +69,13 @@
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
+
           "builder": "@angular/build:extract-i18n"
         },
         "test": {
           "builder": "@angular/build:karma",
           "options": {
+
             "tsConfig": "tsconfig.spec.json",
             "assets": [
               {
@@ -76,7 +85,9 @@
             ],
             "styles": [
               "src/styles.css"
+
             ]
+
           }
         }
       }
@@ -84,5 +95,6 @@
   },
   "cli": {
     "analytics": "27ea622e-ae33-4859-80ce-b462592c8cc1"
+
   }
 }
