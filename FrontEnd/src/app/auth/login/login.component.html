@@ -1,0 +1,22 @@
+<div class="register-container">
+  <h2>Login to QuickCert</h2>
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <label for="nic">NIC</label>
+    <input id="nic" type="text" formControlName="nic" placeholder="Enter NIC">
+    <div *ngIf="submitted && loginForm.get('nic')?.errors" class="error">NIC is required.</div>
+
+    <label for="password">Password</label>
+    <input id="password" type="password" formControlName="password" placeholder="Enter password">
+    <div *ngIf="submitted && loginForm.get('password')?.errors" class="error">Password is required.</div>
+
+    <button type="submit">Login</button>
+  </form>
+
+  <p *ngIf="loginMessage" class="success">{{ loginMessage }}</p>
+
+  <p class="login-link">
+    Don’t have an account?
+    <a routerLink="/register">Register here</a>
+  </p>
+</div>
