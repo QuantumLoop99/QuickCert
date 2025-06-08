@@ -8,10 +8,17 @@
 }
 
 .topbar-title {
-  font-size: 18px;
+  font-size: 30px;
   font-weight: bold;
 }
 
 .topbar-user {
   color: #666;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }

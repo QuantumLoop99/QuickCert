@@ -1,6 +1,13 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .sidebar {
   width: 240px;
-  background-color: #2e3b4e;
+  background-color: #0d6efd;
   color: white;
   padding: 20px;
   height: 100%;
@@ -9,6 +16,8 @@
 .sidebar h2 {
   font-size: 22px;
   margin-bottom: 30px;
+  margin-top: 10px;
+  text-align: center;
 }
 
 .sidebar ul {
@@ -30,4 +39,11 @@
 .sidebar .active {
   font-weight: bold;
   text-decoration: underline;
+}
+
+.sidebar .logo {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 20px;
+  display: block;
 }
