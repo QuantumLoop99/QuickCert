@@ -11,9 +11,8 @@ export const routes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'application', component: ApplicationFormComponent },
     { path: 'feedback', component: FeedbackComponent },
-    { path: '', redirectTo: 'admin', pathMatch: 'full' },
-    {path: 'admin',
-     loadChildren: () => import('./admin/admin-module').then(m => m.AdminModule)
+    { path: '', redirectTo: 'officer', pathMatch: 'full' },
+    {path: 'officer',
+     loadChildren: () => import('./officer/officer.module').then(m => m.OfficerModule)
     }
-
 ];

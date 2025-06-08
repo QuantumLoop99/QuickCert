@@ -1,0 +1,17 @@
+.topbar {
+  background-color: white;
+  border-bottom: 1px solid #ccc;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.topbar-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.topbar-user {
+  color: #666;
+}

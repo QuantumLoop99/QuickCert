@@ -1,1 +1,23 @@
-<p>pending-requests works!</p>
+<div class="panel">
+  <h2>Pending Requests - {{ officerDivision }}</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Reference No</th>
+        <th>Applicant</th>
+        <th>Date</th>
+        <th>Institute</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let req of filteredRequests">
+        <td>{{ req.ref }}</td>
+        <td>{{ req.name }}</td>
+        <td>{{ req.date }}</td>
+        <td>{{ req.institute }}</td>
+        <td><button (click)="review(req)">Review</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

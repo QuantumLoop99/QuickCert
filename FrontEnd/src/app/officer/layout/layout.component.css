@@ -1,0 +1,17 @@
+.officer-layout {
+  display: flex;
+  height: 100vh;
+  background-color: #f7f9fc;
+}
+
+.officer-main {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.officer-content {
+  padding: 20px;
+  overflow-y: auto;
+  height: 100%;
+}

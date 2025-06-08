@@ -1,1 +1,10 @@
-<p>layout works!</p>
+<div class="officer-layout">
+  <app-officer-sidebar></app-officer-sidebar>
+
+  <div class="officer-main">
+    <app-officer-topbar></app-officer-topbar>
+    <main class="officer-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
