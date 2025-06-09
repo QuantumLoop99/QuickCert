@@ -50,12 +50,6 @@ export class HomeComponent implements OnInit {
     // this.router.navigate(['/privacy-policy']);
   }
 
-  navigateToTerms() {
-    console.log('Terms of Service clicked');
-    // Navigate to terms page
-    // this.router.navigate(['/terms']);
-  }
-
   navigateToFAQ() {
     console.log('FAQ clicked');
     // Navigate to FAQ page
@@ -68,7 +62,12 @@ export class HomeComponent implements OnInit {
     // this.router.navigate(['/contact']);
   }
 
-      goToApplicationForm() {
+  goToApplicationForm() {
     this.router.navigate(['/application']);
   }
+
+  goTotrackApplication() {
+    this.router.navigate(['/track']);
+  }
+  
 }

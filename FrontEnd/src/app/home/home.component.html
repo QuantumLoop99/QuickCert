@@ -22,7 +22,7 @@
     <p>QuickCert is the official digital platform of the Divisional Secretariat of Sri Lanka, designed to streamline the income statement certification process. Get your income certificates quickly, securely, and reliably through our user-friendly online system.</p>
     <div class="hero-buttons">
       <button class="btn primary-btn" (click)="goToApplicationForm()">Apply Now</button>   
-      <button class="btn secondary-btn" (click)="trackApplication()">Track Application</button>
+      <button class="btn secondary-btn" (click)="goTotrackApplication()">Track Application</button>
     </div>
   </div>
   <div class="hero-image">
@@ -65,7 +65,7 @@
         <p>Start your income statement certification application</p>
         <button class="quick-link-btn">Apply Now</button>
       </div>
-      <div class="quick-link-card" (click)="trackApplication()">
+      <div class="quick-link-card" (click)="goTotrackApplication()">
         <div class="quick-link-icon">📊</div>
         <h3>Track Your Application</h3>
         <p>Monitor the progress of your certification request</p>
@@ -103,7 +103,6 @@
       <h4>Quick Links</h4>
       <div class="footer-links">
         <a href="#" (click)="navigateToPrivacyPolicy()">Privacy Policy</a>
-        <a href="#" (click)="navigateToTerms()">Terms of Service</a>
         <a href="#" (click)="navigateToFAQ()">FAQ & Help</a>
         <a href="#" (click)="navigateToContact()">Contact Us</a>
       </div>
