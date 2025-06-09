@@ -6,7 +6,9 @@ import { ApplicationFormComponent } from './application-form/application-form.co
 import { FeedbackComponent } from './feedback/feedback.component';
 import { ErrorComponent } from './error/error.component';
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
+import { TrackApplicationComponent } from './track-application/track-application.component';
 
+  
 export const routes: Routes = [
 
   { path: 'home', component: HomeComponent },
@@ -16,5 +18,6 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'error', component: ErrorComponent},
   { path: 'privacy', component: PrivacyPolicyComponent},
-  { path: '', redirectTo: '/privacy', pathMatch: 'full' } 
+  { path: 'track', component: TrackApplicationComponent },
+  { path: '', redirectTo: '/home', pathMatch: 'full' } 
 ];
