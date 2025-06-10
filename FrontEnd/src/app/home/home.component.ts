@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit {
   login() {
     console.log('Login button clicked');
     // Navigate to login page
-    this.router.navigate(['/login']);
+    // this.router.navigate(['/login']);
   }
 
   // Footer navigation methods
@@ -48,12 +48,6 @@ export class HomeComponent implements OnInit {
     console.log('Privacy Policy clicked');
     // Navigate to privacy policy page
     // this.router.navigate(['/privacy-policy']);
-  }
-
-  navigateToTerms() {
-    console.log('Terms of Service clicked');
-    // Navigate to terms page
-    // this.router.navigate(['/terms']);
   }
 
   navigateToFAQ() {
@@ -68,7 +62,12 @@ export class HomeComponent implements OnInit {
     // this.router.navigate(['/contact']);
   }
 
-      goToApplicationForm() {
+  goToApplicationForm() {
     this.router.navigate(['/application']);
   }
+
+  goTotrackApplication() {
+    this.router.navigate(['/track']);
+  }
+  
 }

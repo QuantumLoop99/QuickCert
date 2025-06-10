@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Track Income Statement Certificate</title>
+</head>
+<body>
+  <div class="page-wrapper">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <div class="logo-section">
+          <img src="\images\QuickCERT(T.1).png" alt="Government Logo" class="gov-logo">
+          <div class="title-section">
+            <h1 class="main-title">QuickCert</h1>
+            <p class="sub-title">Income Statement Certificate - Status Tracking</p>
+          </div>
+        </div>
+        <div class="reference-input-section">
+          <label class="reference-label">Reference Number:</label>
+          <div class="input-group">
+            <input 
+              type="text" 
+              class="reference-input" 
+              placeholder="Enter your reference number (e.g., ISC-2025-001234)"
+              [(ngModel)]="referenceNumber"
+              (keyup.enter)="trackApplication()">
+            <button class="track-btn" (click)="trackApplication()">Track</button>
+            <button class="clear-btn" (click)="clearSearch()" *ngIf="referenceNumber">Clear</button>
+          </div>
+          <div class="error-message" *ngIf="searchError">{{ searchError }}</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="container">
+        
+        <!-- Search Instructions (when no application is shown) -->
+        <div class="search-instructions" *ngIf="!showStatusCard && !searchError">
+          <div class="instruction-card">
+            <div class="instruction-icon">🔍</div>
+            <h2>Track Your Application</h2>
+            <p>Enter your reference number above to check the status of your Income Statement Certificate application.</p>
+            <div class="sample-refs">
+              <p><strong>Sample Reference Numbers:</strong></p>
+              <div class="sample-buttons">
+                <button class="sample-btn" (click)="referenceNumber = 'INC-1748783023499-1797'; trackApplication()">INC-1748783023499-1797</button>
+                <button class="sample-btn" (click)="referenceNumber = 'INC-1748783023499-1798'; trackApplication()">INC-1748783023499-1798</button>
+                <button class="sample-btn" (click)="referenceNumber = 'INC-1748783023499-1799'; trackApplication()">INC-1748783023499-1799</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Application Status Section -->
+        <div class="status-section" *ngIf="showStatusCard && currentApplication">
+          
+          <!-- Status Header -->
+          <div class="status-header-card">
+            <div class="status-badge-section">
+              <div class="status-icon">{{ getStatusIcon(currentApplication.status) }}</div>
+              <div class="status-info">
+                <h2>Application Status</h2>
+                <div class="status-badge" [style.background-color]="getStatusColor(currentApplication.status)">
+                  {{ currentApplication.status }}
+                </div>
+              </div>
+            </div>
+            <div class="reference-display">
+              <span class="ref-label">Reference Number:</span>
+              <span class="ref-number">{{ currentApplication.referenceNumber }}</span>
+            </div>
+          </div>
+
+          <!-- Progress Tracker -->
+          <div class="progress-section">
+            <h3>Application Progress</h3>
+            <div class="progress-tracker">
+              <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="currentApplication.progressPercentage"></div>
+              </div>
+              <div class="progress-steps">
+                <div class="progress-step" 
+                     *ngFor="let step of progressSteps; let i = index"
+                     [class.completed]="i < currentApplication.currentStep"
+                     [class.active]="i === currentApplication.currentStep"
+                     [class.pending]="i > currentApplication.currentStep">
+                  <div class="step-circle">
+                    <span class="step-icon">{{ step.icon }}</span>
+                  </div>
+                  <div class="step-content">
+                    <div class="step-title">{{ step.label }}</div>
+                    <div class="step-description">{{ step.description }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Application Details -->
+          <div class="details-section">
+            <h3>Application Details</h3>
+            <div class="details-grid">
+              
+              <!-- Left Column -->
+              <div class="details-column">
+                <div class="detail-group">
+                  <h4>Personal Information</h4>
+                  <div class="detail-row">
+                    <span class="label">Applicant Name:</span>
+                    <span class="value">{{ currentApplication.applicantName }}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="label">Contact Number:</span>
+                    <span class="value">{{ currentApplication.contactNumber }}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="label">Email Address:</span>
+                    <span class="value">{{ currentApplication.email }}</span>
+                  </div>
+                </div>
+
+                <div class="detail-group">
+                  <h4>Processing Information</h4>
+                  <div class="detail-row">
+                    <span class="label">Processing Officer:</span>
+                    <span class="value">{{ currentApplication.processingOfficer }}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="label">Priority Level:</span>
+                    <span class="value">{{ currentApplication.priorityLevel }}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="label">Purpose:</span>
+                    <span class="value">{{ currentApplication.purpose }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Column -->
+              <div class="details-column">
+                <div class="detail-group">
+                  <h4>Timeline Information</h4>
+                  <div class="detail-row">
+                    <span class="label">Submitted Date:</span>
+                    <span class="value">{{ formatDate(currentApplication.submittedDate) }}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="label">Expected Completion:</span>
+                    <span class="value">{{ formatDate(currentApplication.expectedCompletion) }}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="label">Last Updated:</span>
+                    <span class="value">{{ formatDate(currentApplication.lastUpdated) }}</span>
+                  </div>
+                </div>
+
+                <div class="detail-group">
+                  <h4>Current Status</h4>
+                  <div class="status-description">
+                    <p>{{ currentApplication.currentStatusText }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="actions-section">
+            <h3>Available Actions</h3>
+            <div class="action-buttons">
+              <button class="action-btn primary" 
+                      *ngIf="currentApplication.status === 'Completed'"
+                      (click)="downloadCertificate()">
+                <span class="btn-icon">📥</span>
+                Download Certificate
+              </button>
+              
+              <button class="action-btn secondary" 
+                      *ngIf="currentApplication.status === 'Completed'"
+                      (click)="printCertificate()">
+                <span class="btn-icon">🖨️</span>
+                Print Certificate
+              </button>
+              
+              <button class="action-btn outline" (click)="contactSupport()">
+                <span class="btn-icon">📧</span>
+                Contact Support
+              </button>
+              
+              <button class="action-btn outline" (click)="requestUpdate()">
+                <span class="btn-icon">🔔</span>
+                Request Updates
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Quick Help Section -->
+        <div class="help-section">
+          <h3>Need Help?</h3>
+          <div class="help-grid">
+            <div class="help-card">
+              <div class="help-icon">📞</div>
+              <h4>Phone Support</h4>
+              <p>+94 11 234 5678</p>
+              <p>Mon-Fri: 8:00 AM - 4:00 PM</p>
+            </div>
+            <div class="help-card">
+              <div class="help-icon">📧</div>
+              <h4>Email Support</h4>
+              <p>supportdivisec.gov.lk</p>
+              <p>Response within 24 hours</p>
+            </div>
+            <div class="help-card">
+              <div class="help-icon">🏢</div>
+              <h4>Visit Office</h4>
+              <p>Divisional Secretariat Office</p>
+              <p>Colombo 07, Sri Lanka</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <p>&copy; 2025 Divisional Secretariat of Sri Lanka. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">FAQ & Help</a>
+          <a href="#">Contact Us</a>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>
