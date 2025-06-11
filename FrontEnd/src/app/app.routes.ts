@@ -4,6 +4,7 @@ import { LoginComponent} from './auth/login/login.component';
 import { HomeComponent } from './home/home.component';
 import { ApplicationFormComponent } from './application-form/application-form.component';
 import { FeedbackComponent } from './feedback/feedback.component';
+import { DocumentViewrComponent } from './document-viewr/document-viewr.component';
 
 export const routes: Routes = [
     { path: 'register', component: RegisterComponent },
@@ -11,8 +12,9 @@ export const routes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'application', component: ApplicationFormComponent },
     { path: 'feedback', component: FeedbackComponent },
-    { path: '', redirectTo: 'officer', pathMatch: 'full' },
     {path: 'officer',
      loadChildren: () => import('./officer/officer.module').then(m => m.OfficerModule)
-    }
+    },
+    { path: 'document-viewer', component: DocumentViewrComponent },
+    { path: '', redirectTo: 'document-viewer', pathMatch: 'full' }
 ];

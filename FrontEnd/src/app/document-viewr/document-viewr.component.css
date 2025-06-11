@@ -1,0 +1,81 @@
+.viewer-container {
+  background-color: #f9fafc;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  max-width: 900px;
+  margin: 40px auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 10px;
+}
+
+.logo {
+  height: 50px;
+}
+
+.viewer-container h2 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 24px;
+}
+
+.meta {
+  margin-bottom: 30px;
+  font-size: 16px;
+  color: #2e2e2e;
+  background: #eef3f7;
+  padding: 15px 20px;
+  border-radius: 6px;
+  border-left: 5px solid #007acc;
+}
+
+.meta p {
+  margin: 8px 0;
+}
+
+.meta .highlight {
+  color: #0056b3;
+  font-weight: 500;
+}
+
+.actions {
+  margin-bottom: 20px;
+  text-align: right;
+}
+
+.download-btn {
+  background-color: #007acc;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.download-btn:hover {
+  background-color: #005fa3;
+}
+
+.document-frame {
+  width: 100%;
+  height: 80vh;
+  border: 1px solid #d1d1d1;
+  overflow: hidden;
+  border-radius: 6px;
+  background-color: #fff;
+}
+
+.document-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}

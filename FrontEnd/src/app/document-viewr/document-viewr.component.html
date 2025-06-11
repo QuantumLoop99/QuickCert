@@ -1,0 +1,21 @@
+<div class="viewer-container">
+  <div class="header">
+    <img [src]="logoPath" alt="QuickCERT Logo" class="logo">
+    <h2>{{ documentName }}</h2>
+  </div>
+
+  <div class="meta">
+    <p><strong>Applicant Name:</strong> <span class="highlight">{{ applicantName }}</span></p>
+    <p><strong>Issued Date:</strong> <span class="highlight">{{ issuedDate }}</span></p>
+    <p><strong>Request Reference:</strong> <span class="highlight">{{ referenceNumber }}</span></p>
+    <p><strong>Issued By:</strong> <span class="highlight">{{ officerName }}</span></p>
+  </div>
+
+  <div class="actions">
+    <a [href]="documentUrl" download class="download-btn">Download PDF</a>
+  </div>
+
+  <div class="document-frame">
+    <iframe [src]="documentUrl | safe" frameborder="0"></iframe>
+  </div>
+</div>
