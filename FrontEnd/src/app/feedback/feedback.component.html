@@ -2,13 +2,13 @@
 <header class="header">
   <div class="logo">QuickCert</div>
   <nav class="navigation">
-    <a href="#" class="nav-link">Home</a>
-    <a href="#" class="nav-link">About</a>
-    <a href="#" class="nav-link">Contact</a>
-    <a href="#" class="nav-link active">FeedBack</a>
-    <a href="#" class="nav-link">FAQ</a>
+    <a routerLink="/home" class="nav-link">Home</a>
+    <a routerLink="/about" class="nav-link">About</a>
+    <a routerLink="/contact" class="nav-link">Contact</a>
+    <a routerLink="/feedback" class="nav-link active">FeedBack</a>
+    <a routerLink="/faq" class="nav-link">FAQ</a>
   </nav>
-  <button class="sign-in-button">Sign In</button>
+  <button class="sign-in-button" (click)="goToLogin()">Sign In</button>
 </header>
 
 <!-- Feedback Hero Section -->
@@ -248,16 +248,16 @@
     <div class="footer-section">
       <h4>Quick Links</h4>
       <div class="footer-links">
-        <a href="#">Privacy Policy</a>
+        <a routerLink="/privacy-policy">Privacy Policy</a>
         <a href="#">Terms of Service</a>
-        <a href="#">FAQ & Help</a>
-        <a href="#">Contact Us</a>
+        <a routerLink="/faq">FAQ & Help</a>
+        <a routerLink="/contact">Contact Us</a>
       </div>
     </div>
     
     <div class="footer-section">
       <h4>Contact Info</h4>
-      <div class="contact-info">
+      <div class="contact-infor">
         <p>Email: supportquickcert.gov.lk</p>
         <p>Phone: +94 11 234 5678</p>
         <p>Address: Colombo, Sri Lanka</p>

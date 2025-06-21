@@ -17,7 +17,8 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent},
   { path: 'error', component: ErrorComponent},
-  { path: 'privacy', component: PrivacyPolicyComponent},
+  { path: 'privacy-policy', component: PrivacyPolicyComponent},
   { path: 'track', component: TrackApplicationComponent },
-  { path: '', redirectTo: '/home', pathMatch: 'full' } 
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '**', redirectTo: '/home' }
 ];

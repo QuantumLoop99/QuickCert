@@ -38,6 +38,7 @@
   text-decoration: none;
   padding: 0.5rem 0;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .nav-link:hover {
@@ -525,7 +526,7 @@
   margin-bottom: 0.5rem;
 }
 
-.contact-info p {
+.contact-infor p {
   margin-bottom: 0.8rem;
 }
 
@@ -539,6 +540,7 @@
   color: #adb5bd;
   text-decoration: none;
   transition: color 0.3s ease;
+  cursor: pointer;
 }
 
 .footer-links a:hover {
