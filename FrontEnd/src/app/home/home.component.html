@@ -5,11 +5,11 @@
     <span class="logo-text">QuickCert</span>
   </div>
   <nav class="navigation">
-    <a href="#" class="nav-link active">Home</a>
-    <a href="#" class="nav-link">About</a>
-    <a href="#" class="nav-link">Contact</a>
-    <a href="#" class="nav-link">FeedBack</a>
-    <a href="#" class="nav-link">FAQ</a>
+    <a routerLink="/home" routerLinkActive="active" class="nav-link" [routerLinkActiveOptions]="{exact: true}">Home</a>
+    <a routerLink="/about" routerLinkActive="active" class="nav-link">About</a>
+    <a routerLink="/contact" routerLinkActive="active" class="nav-link">Contact</a>
+    <a routerLink="/feedback" routerLinkActive="active" class="nav-link">FeedBack</a>
+    <a routerLink="/faq" routerLinkActive="active" class="nav-link">FAQ</a>
   </nav>
   <button class="sign-in-button" (click)="login()">Login</button>
 </header>
@@ -102,9 +102,9 @@
     <div class="footer-section">
       <h4>Quick Links</h4>
       <div class="footer-links">
-        <a href="#" (click)="navigateToPrivacyPolicy()">Privacy Policy</a>
-        <a href="#" (click)="navigateToFAQ()">FAQ & Help</a>
-        <a href="#" (click)="navigateToContact()">Contact Us</a>
+        <a routerLink="/privacy-policy">Privacy Policy</a>
+        <a routerLink="/faq">FAQ & Help</a>
+        <a routerLink="/contact">Contact Us</a>
       </div>
     </div>
   </div>

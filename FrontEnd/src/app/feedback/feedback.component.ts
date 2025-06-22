@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-feedback',
@@ -46,6 +47,8 @@ export class FeedbackComponent implements OnInit {
     contactPermission: false,
     contactEmail: ''
   };
+
+  constructor(private router: Router) {}
 
   ngOnInit() {
     this.initializeStarRatings();
@@ -439,5 +442,28 @@ export class FeedbackComponent implements OnInit {
       contactPermission: false,
       contactEmail: ''
     };
+  }
+
+  // Navigation methods
+  goHome() {
+    this.router.navigate(['/home']);
+  }
+  goToLogin() {
+    this.router.navigate(['/login']);
+  }
+  goToPrivacyPolicy() {
+    this.router.navigate(['/privacy-policy']);
+  }
+  goToApplication() {
+    this.router.navigate(['/application']);
+  }
+  goToTrack() {
+    this.router.navigate(['/track']);
+  }
+  goToRegister() {
+    this.router.navigate(['/register']);
+  }
+  goToFeedback() {
+    this.router.navigate(['/feedback']);
   }
 }
