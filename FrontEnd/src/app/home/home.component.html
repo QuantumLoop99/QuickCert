@@ -1,0 +1,115 @@
+<!-- Header Section -->
+<header class="header">
+  <div class="logo">
+    <img src="images/QuickCERT(T.1).png" alt="QuickCert Logo" class="logo-img">
+    <span class="logo-text">QuickCert</span>
+  </div>
+  <nav class="navigation">
+    <a routerLink="/home" routerLinkActive="active" class="nav-link" [routerLinkActiveOptions]="{exact: true}">Home</a>
+    <a routerLink="/about" routerLinkActive="active" class="nav-link">About</a>
+    <a routerLink="/contact" routerLinkActive="active" class="nav-link">Contact</a>
+    <a routerLink="/feedback" routerLinkActive="active" class="nav-link">FeedBack</a>
+    <a routerLink="/faq" routerLinkActive="active" class="nav-link">FAQ</a>
+  </nav>
+  <button class="sign-in-button" (click)="login()">Login</button>
+</header>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Welcome to QuickCert</h1>
+    <h2>Your Gateway to Fast Income Statement Certification</h2>
+    <p>QuickCert is the official digital platform of the Divisional Secretariat of Sri Lanka, designed to streamline the income statement certification process. Get your income certificates quickly, securely, and reliably through our user-friendly online system.</p>
+    <div class="hero-buttons">
+      <button class="btn primary-btn" (click)="goToApplicationForm()">Apply Now</button>   
+      <button class="btn secondary-btn" (click)="goTotrackApplication()">Track Application</button>
+    </div>
+  </div>
+  <div class="hero-image">
+     <img src="\images\1.png" alt="QuickCert Digital Platform" width="300" height="300">
+  </div>
+</section>
+
+<!-- Benefits Section -->
+<section class="benefits">
+  <div class="container">
+    <h2>Why Choose QuickCert?</h2>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon">⚡</div>
+        <h3>Fast Processing</h3>
+        <p>Get your income statement certified in record time. Our streamlined digital process reduces waiting periods from weeks to just a few days.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">🛡️</div>
+        <h3>Reliable Service</h3>
+        <p>Built on robust government infrastructure with 99.9% uptime. Your applications are processed accurately and consistently by verified officials.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">🔒</div>
+        <h3>Secure Platform</h3>
+        <p>Bank-level security protocols protect your personal and financial information. All data is encrypted and stored in compliance with government standards.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Quick Links Section -->
+<section class="quick-links">
+  <div class="container">
+    <h2>Quick Access</h2>
+    <div class="quick-links-grid">
+      <div class="quick-link-card" (click)="goToApplicationForm()">
+        <div class="quick-link-icon">📝</div>
+        <h3>Apply for Certificate</h3>
+        <p>Start your income statement certification application</p>
+        <button class="quick-link-btn">Apply Now</button>
+      </div>
+      <div class="quick-link-card" (click)="goTotrackApplication()">
+        <div class="quick-link-icon">📊</div>
+        <h3>Track Your Application</h3>
+        <p>Monitor the progress of your certification request</p>
+        <button class="quick-link-btn">Track Status</button>
+      </div>
+      <div class="quick-link-card" (click)="downloadPdf()">
+        <div class="quick-link-icon">⬇️</div>
+        <h3>Download Certificate</h3>
+        <p>Receive and download your verified income statement securely.</p>
+        <button class="quick-link-btn">Download PDF</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3>QuickCert</h3>
+      <p>Official digital platform for income statement certification by the Divisional Secretariat of Sri Lanka.</p>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Contact Information</h4>
+      <div class="contact-info">
+        <p>📧 supportquickcert.gov.lk</p>
+        <p>📞 +94 11 234 5678</p>
+        <p>🏢 Divisional Secretariat Office<br>Colombo 07, Sri Lanka</p>
+        <p>🕒 Mon-Fri: 8:30 AM - 4:30 PM</p>
+      </div>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <div class="footer-links">
+        <a routerLink="/privacy-policy">Privacy Policy</a>
+        <a routerLink="/faq">FAQ & Help</a>
+        <a routerLink="/contact">Contact Us</a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <div class="copyright">© 2025 QuickCert - Divisional Secretariat of Sri Lanka. All rights reserved.</div>
+  </div>
+</footer>
