@@ -1,0 +1,46 @@
+{
+  "name": "quickcert-system",
+  "private": true,
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "server": "node backend/server.js",
+    "dev": "concurrently \"npm run server\" \"npm start\""
+  },
+  "dependencies": {
+    "@angular/animations": "^20.0.0",
+    "@angular/common": "^20.0.0",
+    "@angular/compiler": "^20.0.0",
+    "@angular/core": "^20.0.0",
+    "@angular/forms": "^20.0.0",
+    "@angular/platform-browser": "^20.0.0",
+    "@angular/router": "^20.0.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.10",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.6.0",
+    "nodemailer": "^6.9.7",
+    "pdfkit": "^0.13.0",
+    "puppeteer": "^24.11.2",
+    "rxjs": "^7.8.1",
+    "tslib": "^2.5.0",
+    "zone.js": "~0.15.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^20.0.0",
+    "@angular/cli": "^20.0.0",
+    "@angular/compiler-cli": "^20.0.0",
+    "@types/bcryptjs": "^2.4.4",
+    "@types/express": "^4.17.17",
+    "@types/jsonwebtoken": "^9.0.3",
+    "@types/multer": "^1.4.8",
+    "@types/nodemailer": "^6.4.13",
+    "concurrently": "^8.2.2",
+    "typescript": "^5.8.2"
+  }
+}
