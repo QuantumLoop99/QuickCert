@@ -1,0 +1,84 @@
+<header class="header">
+  <div class="header-container">
+    <div class="logo-section">
+      <img src="./../../../../assets/images/QiuckCERT3(T).png" alt="QuickCERT Logo" class="logo">
+      <div class="logo-text">
+        <h1>QuickCERT</h1>
+        <span>Digital Income Verification</span>
+      </div>
+    </div>
+
+    <nav class="navigation">
+      <a routerLink="/home" routerLinkActive="active" class="nav-link">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a routerLink="/services/about" routerLinkActive="active" class="nav-link">
+        <i class="fas fa-info-circle"></i>
+        <span>About</span>
+      </a>
+      <a routerLink="/services/contact" routerLinkActive="active" class="nav-link">
+        <i class="fas fa-envelope"></i>
+        <span>Contact</span>
+      </a>
+      <div class="nav-divider" *ngIf="currentUser"></div>
+      <a [routerLink]="getDashboardRoute()" routerLinkActive="active" class="nav-link" *ngIf="currentUser">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a routerLink="/services/calculator" routerLinkActive="active" class="nav-link" *ngIf="currentUser">
+        <i class="fas fa-calculator"></i>
+        <span>Calculator</span>
+      </a>
+      <a routerLink="/services/faq" routerLinkActive="active" class="nav-link">
+        <i class="fas fa-question-circle"></i>
+        <span>Help</span>
+      </a>
+    </nav>
+
+    <div class="user-section">
+      <div class="user-badge" *ngIf="currentUser" (click)="toggleUserMenu()">
+        <div class="user-avatar">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="user-info">
+          <span class="user-name">{{ currentUser.name }}</span>
+          <span class="user-role">
+            <i class="fas" [ngClass]="{
+              'fa-user': currentUser.userType === 'citizen',
+              'fa-user-tie': currentUser.userType === 'gn_officer' || currentUser.userType === 'ds_officer',
+              'fa-user-shield': currentUser.userType === 'admin'
+            }"></i>
+            {{ getUserRoleDisplay(currentUser.userType) }}
+          </span>
+        </div>
+        <div class="dropdown-arrow">
+          <i class="fas fa-chevron-down" [class.rotated]="showUserMenu"></i>
+        </div>
+      </div>
+
+      <div class="user-menu" *ngIf="showUserMenu && currentUser" [@slideDown]>
+        <a [routerLink]="getDashboardRoute()" (click)="showUserMenu = false" class="menu-item">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Dashboard</span>
+        </a>
+        <div class="menu-divider"></div>
+        <button (click)="logout()" class="menu-item logout">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Sign Out</span>
+        </button>
+      </div>
+
+      <div class="auth-buttons" *ngIf="!currentUser">
+        <a routerLink="/login" class="btn-login">
+          <i class="fas fa-sign-in-alt"></i>
+          <span>Sign In</span>
+        </a>
+        <a routerLink="/register" class="btn-register">
+          <i class="fas fa-user-plus"></i>
+          <span>Register</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
