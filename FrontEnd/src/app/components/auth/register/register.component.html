@@ -1,0 +1,228 @@
+<app-header></app-header>
+
+<div class="register-page">
+  <div class="register-container">
+    <div class="register-card">
+      <div class="register-header">
+        <h2>Create Account</h2>
+        <div class="step-indicator">
+          <div class="step" [class.active]="step >= 1">1</div>
+          <div class="step" [class.active]="step >= 2">2</div>
+          <div class="step" [class.active]="step >= 3" *ngIf="userType !== 'citizen'">3</div>
+        </div>
+      </div>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <!-- Step 1: User Type Selection -->
+        <div class="form-step" *ngIf="step === 1">
+          <h3>Are you a Citizen or Officer?</h3>
+          <div class="user-type-selection">
+            <button type="button" class="user-type-card" (click)="selectUserType('citizen')">
+              <div class="icon">👤</div>
+              <h4>Citizen</h4>
+              <p>Request income statements for personal use</p>
+            </button>
+            <button type="button" class="user-type-card" (click)="selectUserType('officer')">
+              <div class="icon">👨‍💼</div>
+              <h4>Officer</h4>
+              <p>Review and process citizen requests</p>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Officer Type Selection -->
+        <div class="form-step" *ngIf="step === 2 && userType === 'officer'">
+          <h3>Select Officer Type</h3>
+          <div class="user-type-selection">
+            <button type="button" class="user-type-card" (click)="selectOfficerType('ds_officer')">
+              <div class="icon">🏛️</div>
+              <h4>DS Officer</h4>
+              <p>Divisional Secretariat Officer</p>
+            </button>
+            <button type="button" class="user-type-card" (click)="selectOfficerType('gn_officer')">
+              <div class="icon">🏘️</div>
+              <h4>GN Officer</h4>
+              <p>Grama Niladhari Officer</p>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 3: Registration Form -->
+        <div class="form-step" *ngIf="(step === 2 && userType === 'citizen') || (step === 2 && userType !== 'officer' && userType !== 'citizen') || step === 3">
+          <h3>{{ userType === 'citizen' ? 'Citizen' : (userType.replace('_', ' ') | titlecase) }} Registration</h3>
+          
+          <div class="form-grid">
+            <!-- Basic Information -->
+            <div class="form-group">
+              <label for="name">Full Name *</label>
+              <input type="text" id="name" formControlName="name" 
+                     [class.error]="isFieldInvalid('name')">
+              <div class="error-message" *ngIf="isFieldInvalid('name')">
+                {{ getFieldError('name') }}
+              </div>
+            </div>
+
+            <div class="form-group" *ngIf="userType === 'citizen'">
+              <label for="title">Title</label>
+              <select id="title" formControlName="title">
+                <option value="">Select Title</option>
+                <option value="Mr">Mr</option>
+                <option value="Mrs">Mrs</option>
+                <option value="Miss">Miss</option>
+                <option value="Dr">Dr</option>
+                <option value="Prof">Prof</option>
+              </select>
+            </div>
+
+            <div class="form-group" *ngIf="userType === 'citizen'">
+              <label for="nic">NIC Number *</label>
+              <input type="text" id="nic" formControlName="nic" 
+                     placeholder="123456789V or 199812345678"
+                     [class.error]="isFieldInvalid('nic')">
+              <div class="error-message" *ngIf="isFieldInvalid('nic')">
+                {{ getFieldError('nic') }}
+              </div>
+            </div>
+
+            <div class="form-group" *ngIf="userType === 'citizen'">
+              <label for="dob">Date of Birth *</label>
+              <input type="date" id="dob" formControlName="dob"
+                     [class.error]="isFieldInvalid('dob')">
+              <div class="error-message" *ngIf="isFieldInvalid('dob')">
+                {{ getFieldError('dob') }}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Phone Number *</label>
+              <input type="tel" id="phone" formControlName="phone" 
+                     placeholder="0771234567"
+                     [class.error]="isFieldInvalid('phone')">
+              <div class="error-message" *ngIf="isFieldInvalid('phone')">
+                {{ getFieldError('phone') }}
+              </div>
+            </div>
+
+            <div class="form-group full-width" *ngIf="userType === 'citizen'">
+              <label for="address">Address *</label>
+              <textarea id="address" formControlName="address" rows="3"
+                        [class.error]="isFieldInvalid('address')"></textarea>
+              <div class="error-message" *ngIf="isFieldInvalid('address')">
+                {{ getFieldError('address') }}
+              </div>
+            </div>
+
+            <div class="form-group" *ngIf="userType === 'citizen'">
+              <label for="employeeType">Employee Type *</label>
+              <select id="employeeType" formControlName="employeeType"
+                      [class.error]="isFieldInvalid('employeeType')">
+                <option value="">Select Type</option>
+                <option value="working">Working</option>
+                <option value="retired">Retired</option>
+              </select>
+              <div class="error-message" *ngIf="isFieldInvalid('employeeType')">
+                {{ getFieldError('employeeType') }}
+              </div>
+            </div>
+
+            <!-- Location Information -->
+            <div class="form-group">
+              <label for="district">District *</label>
+              <select id="district" formControlName="district" 
+                      (change)="onDistrictChange()"
+                      [class.error]="isFieldInvalid('district')">
+                <option value="">Select District</option>
+                <option *ngFor="let district of districts" [value]="district.id">
+                  {{ district.name }}
+                </option>
+              </select>
+              <div class="error-message" *ngIf="isFieldInvalid('district')">
+                {{ getFieldError('district') }}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="dsOffice">DS Office *</label>
+              <select id="dsOffice" formControlName="dsOffice" 
+                      (change)="onDSOfficeChange()"
+                      [class.error]="isFieldInvalid('dsOffice')">
+                <option value="">Select DS Office</option>
+                <option *ngFor="let dsOffice of dsOffices" [value]="dsOffice.id">
+                  {{ dsOffice.name }}
+                </option>
+              </select>
+              <div class="error-message" *ngIf="isFieldInvalid('dsOffice')">
+                {{ getFieldError('dsOffice') }}
+              </div>
+            </div>
+
+            <div class="form-group" *ngIf="userType === 'citizen' || userType === 'gn_officer'">
+              <label for="gnDivision">GN Division *</label>
+              <select id="gnDivision" formControlName="gnDivision"
+                      [class.error]="isFieldInvalid('gnDivision')">
+                <option value="">Select GN Division</option>
+                <option *ngFor="let gnDivision of gnDivisions" [value]="gnDivision.id">
+                  {{ gnDivision.name }}
+                </option>
+              </select>
+              <div class="error-message" *ngIf="isFieldInvalid('gnDivision')">
+                {{ getFieldError('gnDivision') }}
+              </div>
+            </div>
+
+            <!-- Account Information -->
+            <div class="form-group full-width">
+              <label for="email">Email Address *</label>
+              <input type="email" id="email" formControlName="email"
+                     [class.error]="isFieldInvalid('email')">
+              <div class="error-message" *ngIf="isFieldInvalid('email')">
+                {{ getFieldError('email') }}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="password">Password *</label>
+              <input type="password" id="password" formControlName="password"
+                     [class.error]="isFieldInvalid('password')">
+              <div class="error-message" *ngIf="isFieldInvalid('password')">
+                {{ getFieldError('password') }}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword">Confirm Password *</label>
+              <input type="password" id="confirmPassword" formControlName="confirmPassword"
+                     [class.error]="isFieldInvalid('confirmPassword')">
+              <div class="error-message" *ngIf="isFieldInvalid('confirmPassword')">
+                {{ getFieldError('confirmPassword') }}
+              </div>
+            </div>
+
+            <div class="form-group full-width" *ngIf="userType !== 'citizen'">
+              <label for="authCode">Authentication Code *</label>
+              <input type="text" id="authCode" formControlName="authCode" 
+                     placeholder="Enter officer authentication code"
+                     [class.error]="isFieldInvalid('authCode')">
+              <div class="error-message" *ngIf="isFieldInvalid('authCode')">
+                {{ getFieldError('authCode') }}
+              </div>
+            </div>
+          </div>
+
+          <div class="error-message" *ngIf="error">{{ error }}</div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" (click)="goBack()">Back</button>
+            <button type="submit" class="btn-primary" [disabled]="isLoading">
+              {{ isLoading ? 'Creating Account...' : 'Create Account' }}
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <div class="register-footer">
+        <p>Already have an account? <a routerLink="/login">Sign in here</a></p>
+      </div>
+    </div>
+  </div>
+</div>
