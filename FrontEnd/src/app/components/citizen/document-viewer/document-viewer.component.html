@@ -1,0 +1,150 @@
+<app-header></app-header>
+
+<div class="document-viewer-page">
+  <div class="document-viewer-container">
+    <div class="viewer-header">
+      <h2>Document Download</h2>
+      <p>Your approved income statement is ready for download</p>
+    </div>
+
+    <div class="loading" *ngIf="isLoading">
+      <div class="spinner"></div>
+      <p>Loading document details...</p>
+    </div>
+
+    <div class="error-state" *ngIf="error && !isLoading">
+      <div class="error-icon">⚠️</div>
+      <h3>Document Not Available</h3>
+      <p>{{ error }}</p>
+      <a routerLink="/citizen/dashboard" class="btn-primary">Back to Dashboard</a>
+    </div>
+
+    <div class="document-content" *ngIf="request && !isLoading && !error">
+      <!-- Document Info -->
+      <div class="document-info">
+        <div class="info-header">
+          <div class="document-icon">📄</div>
+          <div class="document-details">
+            <h3>Income Statement - {{ request.reference_no }}</h3>
+            <div class="document-meta">
+              <span class="doc-type">{{ request.request_type | titlecase }} Income Statement</span>
+              <span class="doc-status">✅ Approved & Ready</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="document-summary">
+          <div class="summary-item">
+            <span class="label">Request Date:</span>
+            <span class="value">{{ request.created_at | date:'mediumDate' }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="label">Approved Date:</span>
+            <span class="value">{{ request.updated_at | date:'mediumDate' }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="label">Document Type:</span>
+            <span class="value">Official Income Statement (PDF)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Download Section -->
+      <div class="download-section">
+        <div class="download-info">
+          <h4>📥 Download Your Document</h4>
+          <p>Click the button below to download your official income statement. The document is digitally verified and can be used for official purposes.</p>
+          
+          <div class="download-features">
+            <div class="feature">
+              <span class="feature-icon">🔒</span>
+              <span>Digitally Verified</span>
+            </div>
+            <div class="feature">
+              <span class="feature-icon">📋</span>
+              <span>Official Format</span>
+            </div>
+            <div class="feature">
+              <span class="feature-icon">✅</span>
+              <span>Government Approved</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="download-actions">
+          <button class="btn-download" (click)="downloadDocument()" [disabled]="isDownloading">
+            <span class="download-icon" *ngIf="!isDownloading">⬇️</span>
+            <div class="download-spinner" *ngIf="isDownloading"></div>
+            {{ isDownloading ? 'Preparing Download...' : 'Download PDF Document' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Important Notes -->
+      <div class="important-notes">
+        <h4>📌 Important Information</h4>
+        <ul>
+          <li>This document is valid for official use and contains a unique verification code</li>
+          <li>Keep this document safe as it serves as proof of your income status</li>
+          <li>If you need additional copies, you can download this document multiple times</li>
+          <li>For any discrepancies, contact the relevant DS office immediately</li>
+        </ul>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="viewer-actions">
+        <a routerLink="/citizen/dashboard" class="btn-secondary">Back to Dashboard</a>
+        <a [routerLink]="['/citizen/track-status', request.id]" class="btn-outline">View Status</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Feedback Modal -->
+<div class="modal-overlay" *ngIf="showFeedbackForm" (click)="closeFeedbackForm()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Rate Your Experience</h3>
+      <button class="close-btn" (click)="closeFeedbackForm()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <p>Thank you for using QuickCERT! Please rate your experience and help us improve our service.</p>
+      
+      <form [formGroup]="feedbackForm" (ngSubmit)="submitFeedback()">
+        <div class="form-group">
+          <label>How would you rate our service? *</label>
+          <div class="star-rating">
+            <button type="button" 
+                    class="star" 
+                    *ngFor="let star of getStarArray()" 
+                    [class.active]="feedbackForm.get('rating')?.value >= star"
+                    (click)="setRating(star)">
+              ⭐
+            </button>
+          </div>
+          <div class="error-message" *ngIf="isFieldInvalid('rating')">
+            Please provide a rating
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="comments">Additional Comments (Optional)</label>
+          <textarea id="comments" 
+                    formControlName="comments" 
+                    rows="4"
+                    placeholder="Tell us about your experience..."></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="closeFeedbackForm()">
+            Skip
+          </button>
+          <button type="submit" class="btn-submit" [disabled]="!feedbackForm.valid || isSubmittingFeedback">
+            {{ isSubmittingFeedback ? 'Submitting...' : 'Submit Feedback' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
