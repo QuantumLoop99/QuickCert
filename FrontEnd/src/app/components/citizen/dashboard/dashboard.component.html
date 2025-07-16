@@ -1,0 +1,148 @@
+<app-header></app-header>
+
+<div class="dashboard-page">
+  <div class="dashboard-container">
+    <div class="dashboard-header">
+      <h2>My Dashboard</h2>
+      <p>Manage your income statement requests</p>
+    </div>
+
+    <!-- Officer Availability Alert -->
+    <div class="availability-alert" *ngIf="showAvailabilityAlert">
+      <div class="alert-content">
+        <div class="alert-icon">⚠️</div>
+        <div class="alert-message">
+          <h4>Request Submission Restricted</h4>
+          <p>{{ availabilityMessage }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-actions">
+      <a 
+        routerLink="/citizen/new-request" 
+        class="btn-primary"
+        [class.disabled]="!canSubmitRequest('working') && !canSubmitRequest('retired')"
+        [attr.aria-disabled]="!canSubmitRequest('working') && !canSubmitRequest('retired')"
+      >
+        <span class="icon">+</span>
+        {{ getRequestButtonText() }}
+      </a>
+      <a routerLink="/services/calculator" class="btn-secondary">
+        <span class="icon">🧮</span>
+        Income Calculator
+      </a>
+    </div>
+
+    <!-- Officer Status Information -->
+    <div class="officer-status" *ngIf="officerAvailability">
+      <div class="status-card">
+        <h3>📋 Request Availability Status</h3>
+        <div class="status-grid">
+          <div class="status-item">
+            <span class="status-label">DS Officer:</span>
+            <span class="status-value" [class.available]="officerAvailability.availability.hasDS" [class.unavailable]="!officerAvailability.availability.hasDS">
+              {{ officerAvailability.availability.hasDS ? '✅ Available' : '❌ Not Registered' }}
+            </span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">GN Officer:</span>
+            <span class="status-value" [class.available]="officerAvailability.availability.hasGN" [class.unavailable]="!officerAvailability.availability.hasGN">
+              {{ officerAvailability.availability.hasGN ? '✅ Available' : '❌ Not Registered' }}
+            </span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Working Requests:</span>
+            <span class="status-value" [class.available]="officerAvailability.permissions.canSubmitWorking" [class.unavailable]="!officerAvailability.permissions.canSubmitWorking">
+              {{ officerAvailability.permissions.canSubmitWorking ? '✅ Allowed' : '❌ Restricted' }}
+            </span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Retired Requests:</span>
+            <span class="status-value" [class.available]="officerAvailability.permissions.canSubmitRetired" [class.unavailable]="!officerAvailability.permissions.canSubmitRetired">
+              {{ officerAvailability.permissions.canSubmitRetired ? '✅ Allowed' : '❌ Restricted' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="requests-section">
+      <h3>Your Requests</h3>
+      
+      <div class="loading" *ngIf="isLoading">
+        <div class="spinner"></div>
+        <p>Loading your requests...</p>
+      </div>
+
+      <div class="no-requests" *ngIf="!isLoading && requests.length === 0">
+        <div class="empty-state">
+          <div class="empty-icon">📄</div>
+          <h4>No Requests Yet</h4>
+          <p>You haven't submitted any income statement requests yet.</p>
+          <a 
+            routerLink="/citizen/new-request" 
+            class="btn-primary"
+            *ngIf="canSubmitRequest('working') || canSubmitRequest('retired')"
+          >
+            Submit Your First Request
+          </a>
+        </div>
+      </div>
+
+      <div class="requests-grid" *ngIf="!isLoading && requests.length > 0">
+        <div class="request-card" *ngFor="let request of requests">
+          <div class="request-header">
+            <div class="request-id">{{ request.reference_no }}</div>
+            <div class="request-status" [ngClass]="getStatusClass(request.status)">
+              {{ getStatusText(request.status) }}
+            </div>
+          </div>
+          
+          <div class="request-details">
+            <div class="detail">
+              <span class="label">Type:</span>
+              <span class="value">{{ request.request_type | titlecase }}</span>
+            </div>
+            <div class="detail">
+              <span class="label">Submitted:</span>
+              <span class="value">{{ request.created_at | date:'mediumDate' }}</span>
+            </div>
+            <div class="detail" *ngIf="request.updated_at !== request.created_at">
+              <span class="label">Last Updated:</span>
+              <span class="value">{{ request.updated_at | date:'mediumDate' }}</span>
+            </div>
+          </div>
+          
+          <div class="request-actions">
+            <a [routerLink]="['/citizen/track-status', request.id]" class="btn-track">
+              View Status
+            </a>
+            <a 
+              [routerLink]="['/citizen/document-viewer', request.id]" 
+              class="btn-download"
+              *ngIf="request.status === 'ds_approved'"
+            >
+              Download
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-stats" *ngIf="!isLoading && requests.length > 0">
+      <div class="stat-card">
+        <div class="stat-number">{{ requests.length }}</div>
+        <div class="stat-label">Total Requests</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{{ (requests | filter: 'status': 'ds_approved').length }}</div>
+        <div class="stat-label">Approved</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{{ (requests | filter: 'status': ['submitted', 'under_gn_review', 'gn_approved', 'under_ds_review']).length }}</div>
+        <div class="stat-label">Pending</div>
+      </div>
+    </div>
+  </div>
+</div>
