@@ -1,0 +1,116 @@
+<app-header></app-header>
+
+<div class="about-page">
+  <div class="about-container">
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <div class="hero-content">
+        <h1>About QuickCERT</h1>
+        <p class="hero-subtitle">Fast, Reliable, and Secure Certification for Sri Lankan Citizens</p>
+        <p class="hero-description">
+          QuickCERT is a web-based platform designed to simplify and streamline the process of obtaining 
+          official income statements from Sri Lanka's Divisional Secretariat offices.
+        </p>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-number">24/7</span>
+          <span class="stat-label">Online Service</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">5-7</span>
+          <span class="stat-label">Days Processing</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">100%</span>
+          <span class="stat-label">Digital Process</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mission & Vision Section -->
+    <div class="mission-vision-section">
+      <div class="mission-vision-grid">
+        <div class="mission-card">
+          <div class="card-icon">🎯</div>
+          <h3>Our Mission</h3>
+          <p>
+            To provide Sri Lankan citizens with a fast, reliable, and secure digital platform 
+            for obtaining official income statements, eliminating the need for lengthy paperwork 
+            and multiple office visits while maintaining the highest standards of security and data protection.
+          </p>
+        </div>
+        <div class="vision-card">
+          <div class="card-icon">🔮</div>
+          <h3>Our Vision</h3>
+          <p>
+            To be the leading digital certification platform in Sri Lanka, bridging the gap 
+            between traditional bureaucracy and digital transformation, making public services 
+            more accessible, efficient, and user-friendly for all citizens.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Objectives Section -->
+    <div class="objectives-section">
+      <h2>Our Objectives</h2>
+      <div class="objectives-grid">
+        <div class="objective-card" *ngFor="let objective of objectives">
+          <div class="objective-icon">{{ objective.icon }}</div>
+          <h4>{{ objective.title }}</h4>
+          <p>{{ objective.description }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features-section">
+      <h2>Platform Features</h2>
+      <div class="features-grid">
+        <div class="feature-card" *ngFor="let feature of features">
+          <div class="feature-icon">{{ feature.icon }}</div>
+          <h4>{{ feature.title }}</h4>
+          <p>{{ feature.description }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- How It Works Section -->
+    <div class="how-it-works-section">
+      <h2>How QuickCERT Works</h2>
+      <div class="process-steps">
+        <div class="step-item" *ngFor="let step of processSteps; let i = index">
+          <div class="step-number">{{ i + 1 }}</div>
+          <div class="step-content">
+            <div class="step-icon">{{ step.icon }}</div>
+            <h4>{{ step.title }}</h4>
+            <p>{{ step.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Future Plans Section -->
+    <div class="future-section">
+      <h2>Future Enhancements</h2>
+      <div class="future-grid">
+        <div class="future-item" *ngFor="let future of futureEnhancements">
+          <div class="future-icon">{{ future.icon }}</div>
+          <h4>{{ future.title }}</h4>
+          <p>{{ future.description }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="cta-section">
+      <h2>Ready to Get Started?</h2>
+      <p>Experience the future of government services with QuickCERT</p>
+      <div class="cta-buttons">
+        <a routerLink="/register" class="btn btn-primary">Register Now</a>
+        <a routerLink="/services/faq" class="btn btn-secondary">Learn More</a>
+      </div>
+    </div>
+  </div>
+</div>
