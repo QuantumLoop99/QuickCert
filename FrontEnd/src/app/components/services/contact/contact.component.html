@@ -1,0 +1,143 @@
+<app-header></app-header>
+
+<div class="contact-page">
+  <div class="contact-container">
+    <div class="contact-header">
+      <h2>Contact Us</h2>
+      <p>Get in touch with QuickCERT support team</p>
+    </div>
+
+    <div class="contact-content">
+      <!-- Contact Information -->
+      <div class="contact-info">
+        <div class="info-card">
+          <h3>Contact Information</h3>
+          <div class="info-item">
+            <span class="info-icon">📧</span>
+            <div class="info-details">
+              <strong>Email</strong>
+              <span>{{ contactInfo.email }}</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">📞</span>
+            <div class="info-details">
+              <strong>Phone</strong>
+              <span>{{ contactInfo.phone }}</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">📍</span>
+            <div class="info-details">
+              <strong>Address</strong>
+              <span>{{ contactInfo.address }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hours-card">
+          <h3>Office Hours</h3>
+          <div class="hours-item" *ngFor="let hour of officeHours">
+            <div class="day">{{ hour.day }}</div>
+            <div class="time">{{ hour.time }}</div>
+            <div class="status" [class.open]="hour.isOpen" [class.closed]="!hour.isOpen">
+              {{ hour.isOpen ? 'Open' : 'Closed' }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="contact-form">
+        <div class="form-card">
+          <h3>Send us a Message</h3>
+          <form (ngSubmit)="onSubmit()" #contactForm="ngForm">
+            <div class="form-group">
+              <label for="name">Full Name *</label>
+              <input type="text" id="name" name="name" [(ngModel)]="formData.name" required>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email Address *</label>
+              <input type="email" id="email" name="email" [(ngModel)]="formData.email" required>
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" name="phone" [(ngModel)]="formData.phone" required>
+            </div>
+
+            <div class="form-group">
+              <label for="subject">Subject *</label>
+              <select id="subject" name="subject" [(ngModel)]="formData.subject" required>
+                <option value="">Select a subject</option>
+                <option value="general">General Inquiry</option>
+                <option value="technical">Technical Support</option>
+                <option value="account">Account Issues</option>
+                <option value="request">Request Status</option>
+                <option value="feedback">Feedback</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="message">Message *</label>
+              <textarea id="message" name="message" rows="5" [(ngModel)]="formData.message" required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn" [disabled]="!contactForm.valid">
+              Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Emergency Contact -->
+    <div class="emergency-contact">
+      <div class="emergency-card">
+        <h3>Emergency Contact</h3>
+        <p>For urgent matters related to government services</p>
+        <div class="emergency-info">
+          <div class="emergency-item">
+            <span class="emergency-icon">🚨</span>
+            <div class="emergency-details">
+              <strong>Emergency Hotline</strong>
+              <span>+94 11 532 1234</span>
+            </div>
+          </div>
+          <div class="emergency-item">
+            <span class="emergency-icon">📧</span>
+            <div class="emergency-details">
+              <strong>Emergency Email</strong>
+              <span>emergencyquickcert.gov.lk</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="quick-links">
+      <h3>Quick Links</h3>
+      <div class="links-grid">
+        <a routerLink="/faq" class="quick-link">
+          <span class="link-icon">❓</span>
+          <span class="link-text">FAQ</span>
+        </a>
+        <a routerLink="/register" class="quick-link">
+          <span class="link-icon">📝</span>
+          <span class="link-text">Register</span>
+        </a>
+        <a routerLink="/login" class="quick-link">
+          <span class="link-icon">🔑</span>
+          <span class="link-text">Login</span>
+        </a>
+        <a routerLink="/services/calculator" class="quick-link">
+          <span class="link-icon">🧮</span>
+          <span class="link-text">Income Calculator</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
