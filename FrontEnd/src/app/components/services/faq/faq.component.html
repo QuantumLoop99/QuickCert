@@ -1,0 +1,111 @@
+<app-header></app-header>
+
+<div class="faq-page">
+  <div class="faq-container">
+    <div class="faq-header">
+      <h2>Frequently Asked Questions</h2>
+      <p>Find answers to common questions about QuickCERT</p>
+    </div>
+
+    <div class="faq-content">
+      <!-- FAQ Navigation -->
+      <div class="faq-navigation">
+        <h3>Categories</h3>
+        <div class="nav-sections">
+          <button class="nav-section" 
+                  *ngFor="let section of faqSections"
+                  [class.active]="activeSection === section.id"
+                  (click)="setActiveSection(section.id)">
+            <span class="section-icon">{{ section.icon }}</span>
+            <span class="section-title">{{ section.title }}</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- FAQ Content -->
+      <div class="faq-main">
+        <div class="faq-section-header">
+          <h3>{{ getCurrentSectionTitle() }}</h3>
+          <p>{{ getCurrentFaqs().length }} questions in this category</p>
+        </div>
+
+        <div class="faq-items">
+          <div class="faq-item" 
+               *ngFor="let faq of getCurrentFaqs(); let i = index"
+               [class.expanded]="isFaqItemExpanded(activeSection, i)">
+            <div class="faq-question" (click)="toggleFaqItem(activeSection, i)">
+              <h4>{{ faq.question }}</h4>
+              <span class="expand-icon">
+                {{ isFaqItemExpanded(activeSection, i) ? '−' : '+' }}
+              </span>
+            </div>
+            <div class="faq-answer" *ngIf="isFaqItemExpanded(activeSection, i)">
+              <p>{{ faq.answer }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- No FAQs Message -->
+        <div class="no-faqs" *ngIf="getCurrentFaqs().length === 0">
+          <div class="no-faqs-icon">❓</div>
+          <h4>No questions in this category yet</h4>
+          <p>This section is being updated with more helpful information.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="contact-section">
+      <div class="contact-card">
+        <h3>Still need help?</h3>
+        <p>If you can't find the answer you're looking for, don't hesitate to contact us.</p>
+        <div class="contact-options">
+          <div class="contact-option">
+            <span class="contact-icon">📧</span>
+            <div class="contact-details">
+              <strong>Email Support</strong>
+              <span>info&#64;quickcert.gov.lk</span>
+            </div>
+          </div>
+          <div class="contact-option">
+            <span class="contact-icon">📞</span>
+            <div class="contact-details">
+              <strong>Phone Support</strong>
+              <span>+94 11 234 5678</span>
+            </div>
+          </div>
+          <div class="contact-option">
+            <span class="contact-icon">🏢</span>
+            <div class="contact-details">
+              <strong>Visit Office</strong>
+              <span>Your local DS Office</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="quick-links">
+      <h3>Quick Links</h3>
+      <div class="links-grid">
+        <a routerLink="/register" class="quick-link">
+          <span class="link-icon">📝</span>
+          <span class="link-text">Register Account</span>
+        </a>
+        <a routerLink="/login" class="quick-link">
+          <span class="link-icon">🔑</span>
+          <span class="link-text">Login</span>
+        </a>
+        <a routerLink="/services/calculator" class="quick-link">
+          <span class="link-icon">🧮</span>
+          <span class="link-text">Income Calculator</span>
+        </a>
+        <a routerLink="/home" class="quick-link">
+          <span class="link-icon">🏠</span>
+          <span class="link-text">Home</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,134 @@
+<app-header></app-header>
+
+<div class="calculator-page">
+  <div class="calculator-container">
+    <div class="calculator-header">
+      <h2>Income Calculator</h2>
+      <p>Calculate your total monthly and annual income before submitting your request</p>
+    </div>
+
+    <div class="calculator-content">
+      <div class="calculator-form">
+        <form [formGroup]="calculatorForm">
+          <div class="income-sources" formArrayName="incomes">
+            <h3>Income Sources</h3>
+            
+            <div class="income-item" 
+                 *ngFor="let income of incomes.controls; let i = index" 
+                 [formGroupName]="i">
+              <div class="income-header">
+                <h4>
+                  <span class="income-icon">{{ getIncomeTypeIcon(income.get('type')?.value) }}</span>
+                  Income Source {{ i + 1 }}
+                </h4>
+                <button type="button" 
+                        class="btn-remove" 
+                        (click)="removeIncome(i)"
+                        *ngIf="incomes.length > 1">
+                  ×
+                </button>
+              </div>
+
+              <div class="income-fields">
+                <div class="form-group">
+                  <label>Income Type *</label>
+                  <select formControlName="type" [class.error]="isFieldInvalid(i, 'type')">
+                    <option value="">Select Type</option>
+                    <option *ngFor="let type of incomeTypes" [value]="type.value">
+                      {{ type.icon }} {{ type.label }}
+                    </option>
+                  </select>
+                  <div class="error-message" *ngIf="isFieldInvalid(i, 'type')">
+                    Please select an income type
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Description *</label>
+                  <input type="text" 
+                         formControlName="description" 
+                         placeholder="e.g., Software Engineer at ABC Company"
+                         [class.error]="isFieldInvalid(i, 'description')">
+                  <div class="error-message" *ngIf="isFieldInvalid(i, 'description')">
+                    Please provide a description
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Monthly Amount (Rs.) *</label>
+                  <input type="number" 
+                         formControlName="amount" 
+                         min="0" 
+                         step="0.01"
+                         placeholder="0.00"
+                         [class.error]="isFieldInvalid(i, 'amount')">
+                  <div class="error-message" *ngIf="isFieldInvalid(i, 'amount')">
+                    Please enter a valid amount
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="add-income-section">
+              <button type="button" class="btn-add-income" (click)="addIncome()">
+                + Add Another Income Source
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="calculator-results">
+        <div class="results-card">
+          <h3>📊 Income Summary</h3>
+          
+          <div class="income-breakdown" *ngIf="incomes.length > 0">
+            <div class="breakdown-item" 
+                 *ngFor="let income of incomes.controls; let i = index">
+              <div class="breakdown-info">
+                <span class="breakdown-icon">{{ getIncomeTypeIcon(income.get('type')?.value) }}</span>
+                <div class="breakdown-details">
+                  <div class="breakdown-type">{{ getIncomeTypeLabel(income.get('type')?.value) }}</div>
+                  <div class="breakdown-desc">{{ income.get('description')?.value || 'No description' }}</div>
+                </div>
+              </div>
+              <div class="breakdown-amount">
+                Rs. {{ (income.get('amount')?.value || 0) | number:'1.2-2' }}
+              </div>
+            </div>
+          </div>
+
+          <div class="total-section">
+            <div class="total-item monthly">
+              <span class="total-label">Monthly Total:</span>
+              <span class="total-amount">Rs. {{ getTotalIncome() | number:'1.2-2' }}</span>
+            </div>
+            <div class="total-item annual">
+              <span class="total-label">Annual Total:</span>
+              <span class="total-amount">Rs. {{ getAnnualIncome() | number:'1.2-2' }}</span>
+            </div>
+          </div>
+
+          <div class="results-actions">
+            <button type="button" class="btn-reset" (click)="resetCalculator()">
+              🔄 Reset Calculator
+            </button>
+            <a routerLink="/citizen/new-request" class="btn-proceed">
+              📝 Proceed to Request
+            </a>
+          </div>
+        </div>
+
+        <div class="tips-card">
+          <h4>💡 Tips</h4>
+          <ul>
+            <li>Include all sources of regular income</li>
+            <li>Use gross amounts (before deductions)</li>
+            <li>Be accurate as this will be verified</li>
+            <li>Keep supporting documents ready</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
