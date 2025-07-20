@@ -1,0 +1,22 @@
+<!-- certificate-verification.component.html -->
+<app-header></app-header>
+
+<div class="verification-page">
+  <div class="verification-container">
+    <div class="verification-header">
+      <h2>Certificate Verification</h2>
+      <p>Verify the authenticity of QuickCERT income statements and pension reports</p>
+    </div>
+
+    <div class="verification-content">
+      <!-- Verification Form -->
+      <div class="verification-form-card">
+        <form [formGroup]="verificationForm" (ngSubmit)="verifyCertificate()">
+          <label for="verificationCode">Verification Code *</label>
+          <input id="verificationCode" formControlName="verificationCode" placeholder="Enter QC code..." />
+          <button type="submit" [disabled]="isLoading">
+            {{ isLoading ? 'Verifying...' : 'Verify Certificate' }}
+          </button>
+          <div class="error" *ngIf="error">{{ error }}</div>
+        </form>
+      </div>
