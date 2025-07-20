@@ -20,3 +20,40 @@
           <div class="error" *ngIf="error">{{ error }}</div>
         </form>
       </div>
+
+      <!-- Verification Result -->
+      <div class="verification-result-card" *ngIf="verificationResult">
+        <h3>✅ Certificate Verified</h3>
+
+        <section class="info-section">
+          <h4>📋 Certificate Info</h4>
+          <p><strong>Reference No:</strong> {{ verificationResult.reference_no }}</p>
+          <p><strong>Type:</strong> {{ verificationResult.request_type | titlecase }}</p>
+          <p><strong>Status:</strong> {{ getStatusText(verificationResult.status || 'ds_approved') }}</p>
+          <p><strong>Issued:</strong> {{ verificationResult.created_at | date:'mediumDate' }}</p>
+        </section>
+
+        <section class="info-section">
+          <h4>👤 Citizen Info</h4>
+          <p><strong>Name:</strong> {{ verificationResult.name }}</p>
+          <p *ngIf="verificationResult.nic"><strong>NIC:</strong> {{ verificationResult.nic }}</p>
+          <p *ngIf="verificationResult.address"><strong>Address:</strong> {{ verificationResult.address }}</p>
+        </section>
+
+        <section class="info-section">
+          <h4>📄 Request Info</h4>
+          <p *ngIf="verificationResult.reason"><strong>Purpose:</strong> {{ verificationResult.reason }}</p>
+          <p *ngIf="verificationResult.income_year"><strong>Year:</strong> {{ verificationResult.income_year }}</p>
+          <p *ngIf="verificationResult.pension_type"><strong>Pension Type:</strong> {{ verificationResult.pension_type }}</p>
+          <p *ngIf="verificationResult.pension_number"><strong>Pension Number:</strong> {{ verificationResult.pension_number }}</p>
+        </section>
+
+        <section class="info-section">
+          <h4>🔐 Verified</h4>
+          <p>This certificate is digitally signed and verified by the Government of Sri Lanka.</p>
+          <p><strong>Checked at:</strong> {{ currentDate | date:'medium' }}</p>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
