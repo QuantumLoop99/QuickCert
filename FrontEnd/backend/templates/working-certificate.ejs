@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income Certificate</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            font-size: 12pt;
+            line-height: 1.0;
+            margin: 0;
+            padding: 0;
+            color: #000;
+            background-color: #f0f0f0;
+        }
+        
+        .a4-page {
+            width: 210mm;
+            height: 297mm;
+            margin: 20px auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .content-wrapper {
+            flex: 1;
+            padding: 10mm;
+            padding-bottom: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+        }
+
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(0);
+            font-size: 100pt;
+            color: rgba(200, 200, 200, 0.4);
+            z-index: 1000;
+            pointer-events: none;
+            user-select: none;
+            white-space: nowrap;
+        }
+        
+        .logo {
+            width: 95px;
+            height: auto;
+            float: left;
+            margin-right: 20px;
+            padding-left: 25px;
+        }
+        
+        .header-text {
+            margin-left: 138px;
+        }
+        
+        .form-number {
+            font-size: 14pt;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .government-title {
+            font-size: 16pt;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .office-title {
+            font-size: 14pt;
+            margin-bottom: 5px;
+        }
+        
+        .case-number {
+            font-size: 12pt;
+            margin-bottom: 10px;
+        }
+        
+        .certificate-title {
+            font-size: 18pt;
+            font-weight: bold;
+            text-decoration: underline;
+            margin-bottom: 5px;
+        }
+        
+        .validity {
+            font-size: 12pt;
+            font-style: italic;
+        }
+        
+        .content {
+            flex: 1;
+            margin: 0 0;
+            margin-bottom: 0;
+        }
+        
+        .citizen-info {
+            margin-bottom: 10px;
+        }
+        
+        .info-row {
+            margin-bottom: 8px;
+            display: flex;
+        }
+        
+        .label {
+            font-weight: bold;
+            display: inline-block;
+            width: 200px;
+        }
+        
+        .income-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .income-table th,
+        .income-table td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        .income-table th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .income-table .amount {
+            text-align: right;
+        }
+        
+        .total-row {
+            font-weight: bold;
+            background-color: #f9f9f9;
+        }
+        
+        .verification-section {
+            display: flex;
+            justify-content: space-between;
+            margin: 40px 0;
+        }
+        
+        .verification-left {
+            width: 45%;
+        }
+        
+        .verification-right {
+            width: 45%;
+            text-align: right;
+        }
+        
+        .qr-code {
+            width: 120px;
+            height: 120px;
+            border: 1px solid #000;
+            margin: 10px 0;
+        }
+        
+        .signature-section {
+            margin-top: 5px;
+        }
+        
+        .signature-line {
+            border-bottom: 1px solid #000;
+            width: 200px;
+            height: 50px;
+            margin: 10px 0;
+        }
+        
+        .footer {
+            margin-top: auto;
+            padding: 10mm;
+            padding-top: 20px;
+            text-align: left;
+            font-size: 10pt;
+            background-color: #ffffff;
+            border-top: 2px solid #000;
+        }
+        
+        .footer-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .footer-text {
+            margin: 5px 0;
+            line-height: 1.3;
+        }
+        
+        .powered-by {
+            margin-top: 15px;
+            font-size: 9pt;
+            color: #666;
+        }
+        
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        
+        /* Print styles */
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            
+            .a4-page {
+                width: 100%;
+                height: 100vh;
+                margin: 0;
+                box-shadow: none;
+                border: none;
+            }
+            
+            .footer {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+            }
+        }
+    </style>
+</head>
+
+<div class="watermark">TEST COPY</div>
+
+<body>
+    <div class="a4-page">
+        <div class="content-wrapper">
+            <div class="header clearfix">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBOXCYQmnQY6RXdrvkpQkiJBa6DIetjHQM3A&s" alt="Sri Lankan Government Logo" class="logo">
+                <div class="header-text">
+                    <div class="form-number">FORM No. III</div>
+                    <div class="form-number">(See Rule 3)</div>
+                    <div class="government-title">GOVERNMENT OF SRI LANKA</div>
+                    <div class="office-title">Office of the Divisional Secretariat, <%= dsOfficeName.split(' ').slice(0, -2).join(' ') %></div>
+                    <div class="case-number">Miscellaneous Certificate Case No INC/<%= currentYear %>/<%= caseNumber %></div>
+                    <div class="certificate-title">INCOME CERTIFICATE</div>
+                    <div class="validity">(Valid for the Financial Year <%= currentYear %>-<%= nextYear %>)</div>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="citizen-info">
+                    <div class="info-row">
+                        <span class="label">Name:</span>
+                        <span><%= citizenName %></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Address:</span>
+                        <span><%= citizenAddress %></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">NIC Number:</span>
+                        <span><%= citizenNIC %></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Grama Niladhari Division:</span>
+                        <span><%= gnDivision %></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Total Annual Income:</span>
+                        <span><strong>Rs. <%= totalAnnualIncome %></strong></span>
+                    </div>
+                </div>
+
+                <table class="income-table">
+                    <thead>
+                        <tr>
+                            <th>Index</th>
+                            <th>Source</th>
+                            <th>Description</th>
+                            <th>Annual Income</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% incomeSources.forEach((source, index) => { %>
+                            <tr>
+                                <td><%= index + 1 %></td>
+                                <td><%= source.type %></td>
+                                <td><%= source.description %></td>
+                                <td class="amount">Rs. <%= source.annualAmount %></td>
+                            </tr>
+                        <% }); %>
+
+                        <tr class="total-row">
+                            <td colspan="3"><strong>Total</strong></td>
+                            <td class="amount"><strong>Rs. <%= totalAnnualIncome %></strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="verification-section">
+                    <div class="verification-left">
+                        <div><strong>Verification Code:</strong></div>
+                        <div style="font-family: monospace; font-size: 14pt; margin: 10px 0;"><%= verificationCode %></div>
+                        <div><strong>QR Code:</strong></div>
+                        <div class="qr-code" style="background: url('<%= qrCodeUrl %>') no-repeat center; background-size: contain;"></div> 
+                    </div>
+                    <div class="verification-right">
+                        <div class="signature-section">
+                            <div><%= approvalDate %></div>
+                            <div style="margin-top: 5px;"><strong>Signature of the Revenue Officer</strong></div>
+                            <!-- <div class="signature-line"></div> -->
+                            <div style="margin-top: 5px;"><strong><%= officerName %></strong></div>
+                            <div style="margin-top: 5px;">Revenue Officer at <%= dsOfficeName.split(' ').slice(0, -2).join(' ') %></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-title">***** This is a Digitally Signed Document And Does Not Require Signature *****</div>
+            <div class="footer-text">This is a digitally signed electronically generated certificate and therefore needs no ink-signed signature.</div>
+            <div class="footer-text">This Certificate is issued as per section 4, 5 & 6 of Information Technology Act 2000 and its amendments.</div>
+            <div class="footer-text">For queries, visit: https://quickcert.gov.lk/</div>
+            <div class="footer-text">Tampering of this certificate will attract penal action.</div>
+            <div class="powered-by">Powered by QuickCERT</div>
+        </div>
+    </div>
+</body>
+</html>
