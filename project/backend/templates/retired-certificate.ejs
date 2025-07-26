@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pension Report</title>
+  <style>
+
+    body {
+      font-family: 'Times New Roman', serif;
+      font-size: 11pt;
+      line-height: 0.7;
+      margin: 0;
+      padding: 0;
+      color: #000;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #000;
+      padding-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .watermark {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(0);
+        font-size: 100pt;
+        color: rgba(200, 200, 200, 0.4);
+        z-index: 1000;
+        pointer-events: none;
+        user-select: none;
+        white-space: nowrap;
+    }
+
+    .logo {
+      width: 120px;
+      height: auto;
+      float: left;
+      margin-right: 12%;
+      margin-left: 20px;
+    }
+
+    .header-text {
+      margin-top: 10px;
+      margin-left: 85px;
+    }
+
+    .form-number { font-size: 12pt; font-weight: bold; margin-bottom: 8px; }
+    .government-title { font-size: 14pt; font-weight: bold; margin-bottom: 5px; }
+    .office-title { font-size: 12pt; margin-bottom: 5px; }
+    .case-number { font-size: 11pt; margin-bottom: 8px; }
+    .certificate-title { font-size: 16pt; font-weight: bold; text-decoration: underline; margin-bottom: 5px; }
+    .validity { font-size: 11pt; font-style: italic; }
+
+    .content { margin: 10px; }
+
+    .citizen-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+
+    .info-left, .info-right { width: 48%; }
+
+    .info-row { margin-bottom: 6px; }
+
+    .label {
+      font-weight: bold;
+      display: inline-block;
+      width: 140px;
+    }
+
+    .pension-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 10px 0 10px;
+      font-size: 10pt;
+    }
+
+    .pension-table th, .pension-table td {
+      border: 1px solid #000;
+      padding: 6px;
+      text-align: center;
+    }
+
+    .pension-table th {
+      background-color: #f0f0f0;
+      font-weight: bold;
+    }
+
+    .pension-table .type-column { text-align: left; width: 120px; }
+    .pension-table .amount { text-align: right; width: 80px; }
+    .total-column { font-weight: bold; background-color: #f9f9f9; }
+
+    .verification-section {
+      display: flex;
+      justify-content: space-between;
+      margin: 15px 0;
+    }
+
+    .verification-left { width: 35%; }
+    .verification-right { width: 40%; text-align: right; }
+
+    .qr-code {
+      width: 100px;
+      height: 100px;
+      border: 1px solid #000;
+      margin-top: 8px;
+      margin-bottom: 3px;
+      margin-left: 35%;
+    }
+
+    .signature-section { margin-top: 0; }
+
+    .signature-line {
+      border-bottom: 1px solid #000;
+      width: 180px;
+      height: 40px;
+      margin: 8px 0;
+    }
+
+    .footer {
+      margin-bottom: 0;
+      padding: 2mm;
+      padding-top: 5px;
+      text-align: left;
+      font-size: 10pt;
+      background-color: #ffffff;
+      border-top: 2px solid #000;
+    }
+
+    .footer-title { font-weight: bold; margin-bottom: 8px; }
+    .footer-text { margin: 3px 0; line-height: 1.2; }
+    .powered-by { margin-top: 10px; font-size: 8pt; color: #666; }
+
+    .clearfix::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    .summary-section {
+      margin-left: 10px;
+      margin-right: 10px;
+      background-color: #f9f9f9;
+      padding: 10px;
+      border: 1px solid #ddd;
+      width: 97.8%;
+    }
+
+    .summary-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      justify-content: space-between;
+    }
+
+    .summary-item { text-align: center; }
+
+    .summary-label {
+      font-weight: bold;
+      font-size: 10pt;
+    }
+
+    .summary-value {
+      font-size: 12pt;
+      color: black;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+
+<div class="watermark">TEST COPY</div>
+
+<body>
+<div class="a4-landscape">
+  <div class="header clearfix">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBOXCYQmnQY6RXdrvkpQkiJBa6DIetjHQM3A&s" alt="Sri Lankan Government Logo" class="logo">
+    <div class="header-text">
+      <div class="form-number">FORM No. IV</div>
+      <div class="form-number">(See Rule 4)</div>
+      <div class="government-title">GOVERNMENT OF SRI LANKA</div>
+      <div class="office-title">Office of the Divisional Secretariat, <%= dsOfficeName.split(' ').slice(0, -2).join(' ') %></div>
+      <div class="case-number">Pension Certificate Case No PEN/<%= currentYear %>/<%= caseNumber %></div>
+      <div class="certificate-title">PENSION REPORT</div>
+      <div class="validity">(Valid for the Financial Year <%= requestedYear %>)</div>
+    </div>
+    <div class="verification-left">
+      <div><strong>Verification Code:</strong></div>
+      <div style="font-family: monospace; font-size: 14pt; margin: 10px 0;"><%= verificationCode %></div>
+      <div><strong>QR Code:</strong></div>
+      <div class="qr-code" style="background: url('<%= qrCodeUrl %>') no-repeat center; background-size: contain;"></div> 
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="citizen-info">
+      <div class="info-left">
+        <div class="info-row"><span class="label">Name:</span><span><%= citizenName %></span></div>
+        <div class="info-row"><span class="label">Address:</span><span><%= citizenAddress %></span></div>
+        <div class="info-row"><span class="label">NIC Number:</span><span><%= citizenNIC %></span></div>
+        <div class="info-row"><span class="label">Pension Type:</span><span><%= pensionType %></span></div>
+      </div>
+      <div class="info-right">
+        <div class="info-row"><span class="label">Pension Number:</span><span><%= pensionNumber %></span></div>
+        <div class="info-row"><span class="label">Retirement Date:</span><span><%= new Date(retirementDate).toLocaleDateString('en-GB') %>
+</span></div>
+        <div class="info-row"><span class="label">GN Division:</span><span><%= gnDivision %></span></div>
+        <div class="info-row"><span class="label">Reference Number:</span><span><strong><%= referenceNo %></strong></span></div>
+      </div>
+    </div>
+
+    <table class="pension-table">
+      <thead>
+        <tr>
+          <th class="type-column">Type</th>
+          <% const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]; %>
+          <% months.forEach(m => { %><th><%= m %></th><% }); %>
+          <th class="total-column">Annual Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% ["basic", "allowances", "bonus", "tax", "deductions", "net"].forEach(type => { %>
+        <% if (type === 'net') { %>
+        <tr style="background-color:#e6f3ff;font-weight:bold;">
+        <% } else { %>
+        <tr>
+        <% } %>
+          <td class="type-column"><%= type === "net" ? "Net Income" : (type ? type.charAt(0).toUpperCase() + type.slice(1).toLowerCase() : '') %></td>
+          <% monthlyData.forEach(month => { %>
+            <td class="amount">
+              <%= (type === "tax" || type === "deductions") ? '-' : '' %>
+              <%= month[type] ?? "0.00" %>
+            </td>
+          <% }); %>
+          <td class="amount total-column">
+            <%= (type === "tax" || type === "deductions") ? '-' : '' %>
+            <%= yearlyTotals[type] ?? "0.00" %>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+
+    <div class="summary-section">
+      <div class="summary-title">Annual Summary for <%= requestedYear %></div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="summary-label">Total Annual Income</div>
+          <div class="summary-value">Rs. <%= yearlyTotals.net %></div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Average Monthly Income</div>
+          <div class="summary-value">Rs. <%= averageMonthly %></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="verification-section">
+      <div class="verification-left"></div>
+      <div class="verification-right">
+        <div class="signature-section">
+          <div><strong>Approval Date:</strong> <%= approvalDate %></div>
+          <div style="margin-top: 8px;"><strong>Signature of the Officer</strong></div>
+          <div style="margin-top: 8px;"><strong><%= officerName %></strong></div>
+          <div style="margin-top: 8px;">Chief Accountant at <%= dsOfficeName %></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-title">***** This is a Digitally Signed Document And Does Not Require Signature *****</div>
+    <div class="footer-text">This is a digitally signed electronically generated certificate and therefore needs no ink-signed signature.</div>
+    <div class="footer-text">This Certificate is issued as per section 4, 5 & 6 of Information Technology Act 2000 and its amendments.</div>
+    <div class="footer-text">For queries, visit: https://quickcert.gov.lk/</div>
+    <div class="footer-text">Tampering of this certificate will attract penal action.</div>
+    <div class="powered-by">Powered by QuickCERT</div>
+  </div>
+</div>
+</body>
+</html>
