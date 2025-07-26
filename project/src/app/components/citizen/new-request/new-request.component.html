@@ -1,0 +1,301 @@
+<app-header></app-header>
+
+<div class="new-request-page">
+  <div class="new-request-container">
+    <div class="request-header">
+      <h2>New Income Statement Request</h2>
+      <p>Fill out the form below to request your official income statement</p>
+    </div>
+
+    <form [formGroup]="requestForm" (ngSubmit)="onSubmit()" class="request-form">
+      <!-- Request Type -->
+      <div class="form-section">
+        <h3>Request Type</h3>
+        <div class="form-group">
+          <label for="requestType">Employee Type *</label>
+          <select id="requestType" formControlName="requestType" 
+                  (change)="onRequestTypeChange()"
+                  [class.error]="isFieldInvalid('requestType')">
+            <option value="">Select Type</option>
+            <option value="working">Working</option>
+            <option value="retired">Retired</option>
+          </select>
+          <div class="error-message" *ngIf="isFieldInvalid('requestType')">
+            {{ getFieldError('requestType') }}
+          </div>
+        </div>
+
+        <!-- Year Selection for Retired Citizens -->
+        <div class="form-group" *ngIf="requestForm.get('requestType')?.value === 'retired'">
+          <label for="incomeYear">Income Statement Year *</label>
+          <select id="incomeYear" formControlName="incomeYear" 
+                  [class.error]="isFieldInvalid('incomeYear')">
+            <option value="">Select Year</option>
+            <option *ngFor="let year of availableYears" [value]="year">{{ year }}</option>
+          </select>
+          <div class="error-message" *ngIf="isFieldInvalid('incomeYear')">
+            Please select the year for your income statement
+          </div>
+        </div>
+      </div>
+
+      <!-- Working Person Income Sources -->
+      <div class="form-section" *ngIf="requestForm.get('requestType')?.value === 'working'">
+        <h3>Income Sources</h3>
+        
+        <div class="income-sources" *ngIf="incomeSources.length > 0">
+          <div class="income-source-card" *ngFor="let source of incomeSources.controls; let i = index" [formGroup]="$any(source)">
+            <div class="card-header">
+              <h4>Income Source {{ i + 1 }}</h4>
+              <button type="button" class="btn-remove" (click)="removeIncomeSource(i)" 
+                      *ngIf="incomeSources.length > 1">×</button>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Source Type *</label>
+                <select formControlName="type" [class.error]="isFieldInvalid('type', i)">
+                  <option value="">Select Type</option>
+                  <option value="job">Job/Employment</option>
+                  <option value="land">Land/Property</option>
+                  <option value="vehicle">Vehicle</option>
+                  <option value="business">Business</option>
+                  <option value="welfare">Welfare Benefits</option>
+                </select>
+                <div class="error-message" *ngIf="isFieldInvalid('type', i)">
+                  {{ getFieldError('type', i) }}
+                </div>
+              </div>
+
+              <!-- Job Fields -->
+              <ng-container *ngIf="$any(source).get('type')?.value === 'job'">
+                <div class="form-group">
+                  <label>Job Title *</label>
+                  <input type="text" formControlName="title" 
+                         [class.error]="isFieldInvalid('title', i)">
+                  <div class="error-message" *ngIf="isFieldInvalid('title', i)">
+                    {{ getFieldError('title', i) }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Institute/Company *</label>
+                  <input type="text" formControlName="institute" 
+                         [class.error]="isFieldInvalid('institute', i)">
+                  <div class="error-message" *ngIf="isFieldInvalid('institute', i)">
+                    {{ getFieldError('institute', i) }}
+                  </div>
+                </div>
+              </ng-container>
+
+              <!-- Land Fields -->
+              <ng-container *ngIf="$any(source).get('type')?.value === 'land'">
+                <div class="form-group">
+                  <label>Location *</label>
+                  <input type="text" formControlName="location" 
+                         [class.error]="isFieldInvalid('location', i)">
+                  <div class="error-message" *ngIf="isFieldInvalid('location', i)">
+                    {{ getFieldError('location', i) }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Deed Number *</label>
+                  <input type="text" formControlName="deedNo" 
+                         [class.error]="isFieldInvalid('deedNo', i)">
+                  <div class="error-message" *ngIf="isFieldInvalid('deedNo', i)">
+                    {{ getFieldError('deedNo', i) }}
+                  </div>
+                </div>
+              </ng-container>
+
+              <!-- Vehicle Fields -->
+              <ng-container *ngIf="$any(source).get('type')?.value === 'vehicle'">
+                <div class="form-group">
+                  <label>Vehicle Type *</label>
+                  <input type="text" formControlName="vehicleType" 
+                         placeholder="e.g., Car, Motorcycle, Three-wheeler"
+                         [class.error]="isFieldInvalid('vehicleType', i)">
+                  <div class="error-message" *ngIf="isFieldInvalid('vehicleType', i)">
+                    {{ getFieldError('vehicleType', i) }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Registration Number *</label>
+                  <input type="text" formControlName="regNo" 
+                         [class.error]="isFieldInvalid('regNo', i)">
+                  <div class="error-message" *ngIf="isFieldInvalid('regNo', i)">
+                    {{ getFieldError('regNo', i) }}
+                  </div>
+                </div>
+              </ng-container>
+
+              <!-- Business Fields -->
+              <ng-container *ngIf="$any(source).get('type')?.value === 'business'">
+                <div class="form-group">
+                  <label>Business Name *</label>
+                  <input type="text" formControlName="title" 
+                         [class.error]="isFieldInvalid('title', i)">
+                  <div class="error-message" *ngIf="isFieldInvalid('title', i)">
+                    {{ getFieldError('title', i) }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Registration Number *</label>
+                  <input type="text" formControlName="regNo" 
+                         [class.error]="isFieldInvalid('regNo', i)">
+                  <div class="error-message" *ngIf="isFieldInvalid('regNo', i)">
+                    {{ getFieldError('regNo', i) }}
+                  </div>
+                </div>
+              </ng-container>
+
+              <!-- Welfare Fields -->
+              <ng-container *ngIf="$any(source).get('type')?.value === 'welfare'">
+                <div class="form-group">
+                  <label>Welfare Type *</label>
+                  <select formControlName="title" [class.error]="isFieldInvalid('title', i)">
+                    <option value="">Select Welfare Type</option>
+                    <option *ngFor="let type of welfareTypes" [value]="type">{{ type }}</option>
+                  </select>
+                  <div class="error-message" *ngIf="isFieldInvalid('title', i)">
+                    {{ getFieldError('title', i) }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Beneficiary Number *</label>
+                  <input type="text" formControlName="beneficiaryNo" 
+                         [class.error]="isFieldInvalid('beneficiaryNo', i)">
+                  <div class="error-message" *ngIf="isFieldInvalid('beneficiaryNo', i)">
+                    {{ getFieldError('beneficiaryNo', i) }}
+                  </div>
+                </div>
+              </ng-container>
+
+              <div class="form-group">
+                <label>Monthly Income (Rs.) *</label>
+                <input type="number" formControlName="income" min="0" step="0.01"
+                       [class.error]="isFieldInvalid('income', i)">
+                <div class="error-message" *ngIf="isFieldInvalid('income', i)">
+                  {{ getFieldError('income', i) }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="income-actions">
+          <div class="add-income-buttons">
+            <button type="button" class="btn-add-income" (click)="addIncomeSource('job')">+ Add Job</button>
+            <button type="button" class="btn-add-income" (click)="addIncomeSource('land')">+ Add Land</button>
+            <button type="button" class="btn-add-income" (click)="addIncomeSource('vehicle')">+ Add Vehicle</button>
+            <button type="button" class="btn-add-income" (click)="addIncomeSource('business')">+ Add Business</button>
+            <button type="button" class="btn-add-income" (click)="addIncomeSource('welfare')">+ Add Welfare</button>
+          </div>
+          
+          <div class="total-income" *ngIf="incomeSources.length > 0">
+            <strong>Total Monthly Income: Rs. {{ getTotalIncome().toFixed(2) }}</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Retired Person Details -->
+      <div class="form-section" *ngIf="requestForm.get('requestType')?.value === 'retired'">
+        <h3>Pension Details</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="pensionType">Pension Type *</label>
+            <select id="pensionType" formControlName="pensionType" 
+                    [class.error]="isFieldInvalid('pensionType')">
+              <option value="">Select Pension Type</option>
+              <option value="government">Government Pension</option>
+              <option value="private">Private Pension</option>
+              <option value="epf">EPF Pension</option>
+              <option value="military">Military Pension</option>
+            </select>
+            <div class="error-message" *ngIf="isFieldInvalid('pensionType')">
+              {{ getFieldError('pensionType') }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="retirementDate">Retirement Date *</label>
+            <input type="date" id="retirementDate" formControlName="retirementDate"
+                   [class.error]="isFieldInvalid('retirementDate')">
+            <div class="error-message" *ngIf="isFieldInvalid('retirementDate')">
+              {{ getFieldError('retirementDate') }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="pensionNumber">Pension Number *</label>
+            <input type="text" id="pensionNumber" formControlName="pensionNumber"
+                   [class.error]="isFieldInvalid('pensionNumber')">
+            <div class="error-message" *ngIf="isFieldInvalid('pensionNumber')">
+              {{ getFieldError('pensionNumber') }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="workedInstitute">Last Worked Institute *</label>
+            <input type="text" id="workedInstitute" formControlName="workedInstitute"
+                   [class.error]="isFieldInvalid('workedInstitute')">
+            <div class="error-message" *ngIf="isFieldInvalid('workedInstitute')">
+              {{ getFieldError('workedInstitute') }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Common Fields -->
+      <div class="form-section">
+        <h3>Request Details</h3>
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="reason">Reason for Request *</label>
+            <textarea id="reason" formControlName="reason" rows="3"
+                      placeholder="Please specify why you need this income statement"
+                      [class.error]="isFieldInvalid('reason')"></textarea>
+            <div class="error-message" *ngIf="isFieldInvalid('reason')">
+              {{ getFieldError('reason') }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="paymentRef">Payment Reference Number *</label>
+            <input type="text" id="paymentRef" formControlName="paymentRef"
+                   placeholder="Bank slip reference or online payment ID"
+                   [class.error]="isFieldInvalid('paymentRef')">
+            <div class="error-message" *ngIf="isFieldInvalid('paymentRef')">
+              {{ getFieldError('paymentRef') }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Declaration -->
+      <div class="form-section">
+        <div class="declaration-box">
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="declaration">
+            <span class="checkmark"></span>
+            I hereby declare that all the information provided above is true and accurate to the best of my knowledge. I understand that providing false information may result in legal consequences.
+          </label>
+          <div class="error-message" *ngIf="isFieldInvalid('declaration')">
+            You must accept the declaration to proceed
+          </div>
+        </div>
+      </div>
+
+      <div class="error-message" *ngIf="error">{{ error }}</div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" routerLink="/citizen/dashboard">
+          Cancel
+        </button>
+        <button type="submit" class="btn-submit" [disabled]="!requestForm.valid || isLoading">
+          {{ isLoading ? 'Submitting...' : 'Submit Request' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

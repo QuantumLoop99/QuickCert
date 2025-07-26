@@ -1,0 +1,153 @@
+<app-header></app-header>
+
+<div class="track-status-page">
+  <div class="track-status-container">
+    <div class="status-header">
+      <h2>Track Request Status</h2>
+      <p>Monitor the progress of your income statement request</p>
+    </div>
+
+    <div class="loading" *ngIf="isLoading">
+      <div class="spinner"></div>
+      <p>Loading request status...</p>
+    </div>
+
+    <div class="error-state" *ngIf="error && !isLoading">
+      <div class="error-icon">⚠️</div>
+      <h3>Unable to Load Request</h3>
+      <p>{{ error }}</p>
+      <a routerLink="/citizen/dashboard" class="btn-primary">Back to Dashboard</a>
+    </div>
+
+    <div class="status-content" *ngIf="request && !isLoading">
+      <!-- Request Overview -->
+      <div class="request-overview">
+        <div class="overview-header">
+          <div class="request-info">
+            <h3>{{ request.reference_no }}</h3>
+            <div class="request-meta">
+              <span class="request-type">{{ request.request_type | titlecase }} Request</span>
+              <span class="request-date">Submitted: {{ request.created_at | date:'mediumDate' }}</span>
+            </div>
+          </div>
+          <div class="current-status">
+            <span class="status-badge" [ngClass]="getStatusClass(request.status)">
+              {{ getStatusText(request.status) }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status Timeline -->
+      <div class="status-timeline" *ngIf="!isRejected()">
+        <h4>Request Progress</h4>
+        <div class="timeline">
+          <div class="timeline-item" 
+               *ngFor="let step of statusSteps; let i = index"
+               [ngClass]="{
+                 'completed': isStepCompleted(i),
+                 'active': isStepActive(i),
+                 'hidden': request.request_type === 'retired' && (step.key === 'under_gn_review' || step.key === 'gn_approved')
+               }">
+            <div class="timeline-marker">
+              <div class="marker-circle">
+                <span *ngIf="isStepCompleted(i)">✓</span>
+                <span *ngIf="!isStepCompleted(i)">{{ i + 1 }}</span>
+              </div>
+            </div>
+            <div class="timeline-content">
+              <h5>{{ step.label }}</h5>
+              <p>{{ step.description }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rejection Details -->
+      <div class="rejection-details" *ngIf="isRejected()">
+        <div class="rejection-header">
+          <div class="rejection-icon">❌</div>
+          <h4>Request Rejected</h4>
+        </div>
+        <div class="rejection-content" *ngIf="request.review_comments">
+          <h5>Reason for Rejection:</h5>
+          <p>{{ request.review_comments }}</p>
+        </div>
+        <div class="rejection-actions">
+          <a routerLink="/citizen/new-request" class="btn-primary">Submit New Request</a>
+        </div>
+      </div>
+
+      <!-- Request Details -->
+      <div class="request-details">
+        <h4>Request Details</h4>
+        <div class="details-grid">
+          <div class="detail-item">
+            <span class="label">Request Type:</span>
+            <span class="value">{{ request.request_type | titlecase }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Submitted Date:</span>
+            <span class="value">{{ request.created_at | date:'medium' }}</span>
+          </div>
+          <div class="detail-item" *ngIf="request.updated_at !== request.created_at">
+            <span class="label">Last Updated:</span>
+            <span class="value">{{ request.updated_at | date:'medium' }}</span>
+          </div>
+          <div class="detail-item" *ngIf="request.reason">
+            <span class="label">Reason:</span>
+            <span class="value">{{ request.reason }}</span>
+          </div>
+          <div class="detail-item" *ngIf="request.payment_ref">
+            <span class="label">Payment Reference:</span>
+            <span class="value">{{ request.payment_ref }}</span>
+          </div>
+          
+          <!-- Working Request Details -->
+          <div class="detail-item full-width" *ngIf="request.request_type === 'working' && request.income_sources">
+            <span class="label">Income Sources:</span>
+            <span class="value">{{ formatIncomeSources(request.income_sources) }}</span>
+          </div>
+          
+          <!-- Retired Request Details -->
+          <ng-container *ngIf="request.request_type === 'retired'">
+            <div class="detail-item" *ngIf="request.pension_type">
+              <span class="label">Pension Type:</span>
+              <span class="value">{{ request.pension_type }}</span>
+            </div>
+            <div class="detail-item" *ngIf="request.pension_number">
+              <span class="label">Pension Number:</span>
+              <span class="value">{{ request.pension_number }}</span>
+            </div>
+            <div class="detail-item" *ngIf="request.retirement_date">
+              <span class="label">Retirement Date:</span>
+              <span class="value">{{ request.retirement_date | date:'mediumDate' }}</span>
+            </div>
+            <div class="detail-item" *ngIf="request.worked_institute">
+              <span class="label">Last Worked Institute:</span>
+              <span class="value">{{ request.worked_institute }}</span>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- Review Comments -->
+      <div class="review-comments" *ngIf="request.review_comments && !isRejected()">
+        <h4>Review Comments</h4>
+        <div class="comments-content">
+          <p>{{ request.review_comments }}</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="status-actions">
+        <a routerLink="/citizen/dashboard" class="btn-secondary">Back to Dashboard</a>
+        <a [routerLink]="['/citizen/document-viewer', request.id]" 
+           class="btn-primary" 
+           *ngIf="isApproved()">
+          Download Document
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

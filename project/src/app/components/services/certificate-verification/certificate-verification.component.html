@@ -1,0 +1,169 @@
+<!-- certificate-verification.component.html -->
+<app-header></app-header>
+
+<div class="verification-page">
+  <div class="verification-container">
+    <div class="verification-header">
+      <h2>🔍 Certificate Verification</h2>
+      <p>Verify the authenticity of QuickCERT income statements and pension reports</p>
+    </div>
+
+    <div class="verification-content">
+      <!-- Verification Form -->
+      <div class="verification-form-card">
+        <form [formGroup]="verificationForm" (ngSubmit)="verifyCertificate()" class="form-container">
+          <div class="form-group">
+            <label for="verificationCode">Verification Code *</label>
+            <input 
+              class="verification-input"
+              [class.error]="isFieldInvalid('verificationCode')"
+              id="verificationCode" 
+              formControlName="verificationCode" 
+              placeholder="Enter your QC verification code (e.g., QC123456789)"
+              maxlength="20"
+            />
+            <div class="error-message" *ngIf="isFieldInvalid('verificationCode')">
+              <span *ngIf="verificationForm.get('verificationCode')?.errors?.['required']">
+                Verification code is required
+              </span>
+              <span *ngIf="verificationForm.get('verificationCode')?.errors?.['minlength']">
+                Verification code must be at least 8 characters long
+              </span>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button 
+              class="btn-verify" 
+              type="submit" 
+              [disabled]="isLoading || verificationForm.invalid"
+            >
+              <span *ngIf="isLoading" class="loading-spinner"></span>
+              {{ isLoading ? 'Verifying...' : 'Verify Certificate' }}
+            </button>
+            <button 
+              class="btn-reset" 
+              type="button" 
+              (click)="resetForm()"
+              [disabled]="isLoading"
+            >
+              Reset Form
+            </button>
+          </div>
+
+          <div class="error-state" *ngIf="error && !isLoading">
+            ❌ {{ error }}
+          </div>
+        </form>
+      </div>
+
+      <!-- Verification Result -->
+      <div class="verification-result-card" *ngIf="verificationResult && !isLoading">
+        <div class="result-header">
+          <h3>✅ Certificate Verified Successfully</h3>
+          <div class="verified-badge">
+            🛡️ Digitally Verified & Authentic
+          </div>
+        </div>
+
+        <div class="info-section">
+          <h4>📋 Certificate Information</h4>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Reference Number</span>
+              <span class="value">{{ verificationResult.reference_no }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Certificate Type</span>
+              <span class="value">{{ verificationResult.request_type | titlecase }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Status</span>
+              <span class="value">
+                <span class="status-badge" [class]="getStatusClass(verificationResult.status || 'ds_approved')">
+                  {{ getStatusText(verificationResult.status || 'ds_approved') }}
+                </span>
+              </span>
+            </div>
+            <div class="info-item">
+              <span class="label">Issue Date</span>
+              <span class="value">{{ verificationResult.created_at | date:'fullDate' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-section">
+          <h4>👤 Citizen Information</h4>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Full Name</span>
+              <span class="value">{{ verificationResult.name }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">National ID</span>
+              <span class="value">{{ verificationResult.nic }}</span>
+            </div>
+            <div class="info-item" *ngIf="verificationResult.phone">
+              <span class="label">Phone Number</span>
+              <span class="value">{{ verificationResult.phone }}</span>
+            </div>
+            <div class="info-item full-width">
+              <span class="label">Address</span>
+              <span class="value">{{ verificationResult.address }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-section">
+          <h4>📄 Request Details</h4>
+          <div class="info-grid">
+            <div class="info-item" *ngIf="verificationResult.reason">
+              <span class="label">Purpose</span>
+              <span class="value">{{ verificationResult.reason }}</span>
+            </div>
+            <div class="info-item" *ngIf="verificationResult.income_year">
+              <span class="label">Income Year</span>
+              <span class="value">{{ verificationResult.income_year }}</span>
+            </div>
+            <div class="info-item" *ngIf="verificationResult.pension_type">
+              <span class="label">Pension Type</span>
+              <span class="value">{{ verificationResult.pension_type }}</span>
+            </div>
+            <div class="info-item" *ngIf="verificationResult.pension_number">
+              <span class="label">Pension Number</span>
+              <span class="value">{{ verificationResult.pension_number }}</span>
+            </div>
+            <div class="info-item" *ngIf="verificationResult.retirement_date">
+              <span class="label">Retirement Date</span>
+              <span class="value">{{ verificationResult.retirement_date | date:'mediumDate' }}</span>
+            </div>
+            <div class="info-item full-width" *ngIf="verificationResult.income_sources">
+              <span class="label">Income Sources</span>
+              <span class="value">{{ formatIncomeSources(verificationResult.income_sources) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-section">
+          <h4>🔐 Digital Verification</h4>
+          <div class="digital-signature">
+            <div class="signature-icon">🛡️</div>
+            <p>This certificate has been digitally signed and is verified as authentic by the</p>
+            <p class="authority">Government of Sri Lanka - QuickCERT System</p>
+            <div class="verification-timestamp">
+              <strong>Verified at:</strong> {{ currentDate | date:'full' }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div class="verification-result-card" *ngIf="isLoading">
+        <div class="result-header">
+          <h3><span class="loading-spinner"></span> Verifying Certificate...</h3>
+          <p>Please wait while we validate your certificate with our secure database.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

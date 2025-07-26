@@ -1,0 +1,328 @@
+<app-header></app-header>
+
+<div class="dashboard-page">
+  <div class="dashboard-container">
+    <div class="dashboard-header">
+      <h2>DS Officer Dashboard</h2>
+      <p>Review and finalize citizen income statement requests</p>
+    </div>
+
+    <div class="stats-section">
+      <div class="stat-card">
+        <div class="stat-number">{{ pendingRequests.length }}</div>
+        <div class="stat-label">Pending Reviews</div>
+      </div>
+    </div>
+
+    <div class="requests-section">
+      <h3>Pending Requests</h3>
+      
+      <div class="loading" *ngIf="isLoading">
+        <div class="spinner"></div>
+        <p>Loading pending requests...</p>
+      </div>
+
+      <div class="no-requests" *ngIf="!isLoading && pendingRequests.length === 0">
+        <div class="empty-state">
+          <div class="empty-icon">📋</div>
+          <h4>No Pending Requests</h4>
+          <p>All requests have been processed.</p>
+        </div>
+      </div>
+
+      <div class="requests-table" *ngIf="!isLoading && pendingRequests.length > 0">
+        <table>
+          <thead>
+            <tr>
+              <th>Reference</th>
+              <th>Citizen Name</th>
+              <th>Request Type</th>
+              <th>Submitted Date</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let request of pendingRequests">
+              <td class="reference">{{ request.reference_no }}</td>
+              <td>{{ request.user_name }}</td>
+              <td class="request-type">{{ request.request_type | titlecase }}</td>
+              <td>{{ request.created_at | date:'mediumDate' }}</td>
+              <td>
+                <span class="status-badge" [ngClass]="getStatusClass(request.status)">
+                  {{ getStatusText(request.status) }}
+                </span>
+              </td>
+              <td>
+                <button class="btn-review" (click)="openReviewModal(request)">
+                  Review
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Review Modal -->
+<div class="modal-overlay" *ngIf="showReviewModal" (click)="closeReviewModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Review Request: {{ selectedRequest?.reference_no }}</h3>
+      <button class="close-btn" (click)="closeReviewModal()">×</button>
+    </div>
+
+    <div class="modal-body" *ngIf="selectedRequest">
+      <div class="request-details">
+        <h4>Request Details</h4>
+        <div class="detail-grid">
+          <div class="detail">
+            <span class="label">Citizen:</span>
+            <span class="value">{{ selectedRequest.user_name }}</span>
+          </div>
+          <div class="detail">
+            <span class="label">Type:</span>
+            <span class="value">{{ selectedRequest.request_type | titlecase }}</span>
+          </div>
+          <div class="detail">
+            <span class="label">Submitted:</span>
+            <span class="value">{{ selectedRequest.created_at | date:'medium' }}</span>
+          </div>
+          <div class="detail" *ngIf="selectedRequest.income_year">
+            <span class="label">Requested Year:</span>
+            <span class="value">{{ selectedRequest.income_year }}</span>
+          </div>
+          <div class="detail" *ngIf="selectedRequest.reason">
+            <span class="label">Reason:</span>
+            <span class="value">{{ selectedRequest.reason }}</span>
+          </div>
+          <div class="detail" *ngIf="selectedRequest.request_type === 'working' && selectedRequest.income_sources">
+            <span class="label">Income Sources:</span>
+            <span class="value">{{ formatIncomeSources(selectedRequest.income_sources) }}</span>
+          </div>
+          <div class="detail" *ngIf="selectedRequest.pension_type">
+            <span class="label">Pension Type:</span>
+            <span class="value">{{ selectedRequest.pension_type }}</span>
+          </div>
+          <div class="detail" *ngIf="selectedRequest.pension_number">
+            <span class="label">Pension Number:</span>
+            <span class="value">{{ selectedRequest.pension_number }}</span>
+          </div>
+          <div class="detail" *ngIf="selectedRequest.retirement_date">
+            <span class="label">Retirement Date:</span>
+            <span class="value">{{ selectedRequest.retirement_date | date:'mediumDate' }}</span>
+          </div>
+          <div class="detail" *ngIf="selectedRequest.worked_institute">
+            <span class="label">Last Worked Institute:</span>
+            <span class="value">{{ selectedRequest.worked_institute }}</span>
+          </div>
+        </div>
+      </div>
+
+      <form [formGroup]="reviewForm" (ngSubmit)="submitReview()">
+        <div class="form-group">
+          <label>Decision *</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" formControlName="action" value="approve">
+              <span class="radio-label approve">Approve</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" formControlName="action" value="reject">
+              <span class="radio-label reject">Reject</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Month-by-Month Income Data for Retired Requests -->
+        <div class="monthly-income-section" *ngIf="isApprovalWithRetiredRequest()">
+          <div class="section-header">
+            <h4>📅 Monthly Pension Breakdown for {{ getRequestedYear() }}</h4>
+            <p class="section-description">Enter pension details for each month of the requested year. Use the "Copy to All" buttons to quickly fill similar amounts across months.</p>
+          </div>
+
+          <!-- Quick Fill Tools -->
+          <div class="quick-fill-tools">
+            <div class="tool-group">
+              <label>Quick Fill Basic Pension:</label>
+              <button type="button" class="btn-quick-fill" (click)="fillBasicPensionForAll()">
+                Copy January Basic to All Months
+              </button>
+            </div>
+          </div>
+
+          <form [formGroup]="monthlyIncomeForm">
+            <div class="months-container" formArrayName="months">
+              <div class="month-card" 
+                   *ngFor="let monthForm of monthsArray.controls; let i = index" 
+                   [formGroupName]="i">
+                <div class="month-header">
+                  <h5>{{ monthNames[i] }} {{ getRequestedYear() }}</h5>
+                  <div class="month-net">
+                    Net: Rs. {{ monthlyTotals[i] | number:'1.2-2' }}
+                  </div>
+                </div>
+
+                <div class="month-fields">
+                  <div class="field-group income-fields">
+                    <div class="field-section">
+                      <h6>💰 Income</h6>
+                      <div class="input-row">
+                        <div class="input-group">
+                          <label>Basic Pension *</label>
+                          <input type="number" 
+                                 formControlName="basic" 
+                                 min="0" 
+                                 step="0.01"
+                                 placeholder="0.00"
+                                 class="amount-input">
+                          <button type="button" 
+                                  class="btn-copy" 
+                                  (click)="copyToAllMonths('basic', i)"
+                                  title="Copy to all months">
+                            📋
+                          </button>
+                        </div>
+                      </div>
+                      <div class="input-row">
+                        <div class="input-group">
+                          <label>Allowances</label>
+                          <input type="number" 
+                                 formControlName="allowances" 
+                                 min="0" 
+                                 step="0.01"
+                                 placeholder="0.00"
+                                 class="amount-input">
+                          <button type="button" 
+                                  class="btn-copy" 
+                                  (click)="copyToAllMonths('allowances', i)"
+                                  title="Copy to all months">
+                            📋
+                          </button>
+                        </div>
+                      </div>
+                      <div class="input-row">
+                        <div class="input-group">
+                          <label>Bonus/Festival</label>
+                          <input type="number" 
+                                 formControlName="bonus" 
+                                 min="0" 
+                                 step="0.01"
+                                 placeholder="0.00"
+                                 class="amount-input">
+                          <button type="button" 
+                                  class="btn-copy" 
+                                  (click)="copyToAllMonths('bonus', i)"
+                                  title="Copy to all months">
+                            📋
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="field-group deduction-fields">
+                    <div class="field-section">
+                      <h6>➖ Deductions</h6>
+                      <div class="input-row">
+                        <div class="input-group">
+                          <label>Other Deductions</label>
+                          <input type="number" 
+                                 formControlName="deductions" 
+                                 min="0" 
+                                 step="0.01"
+                                 placeholder="0.00"
+                                 class="amount-input">
+                          <button type="button" 
+                                  class="btn-copy" 
+                                  (click)="copyToAllMonths('deductions', i)"
+                                  title="Copy to all months">
+                            📋
+                          </button>
+                        </div>
+                      </div>
+                      <div class="input-row">
+                        <div class="input-group">
+                          <label>Tax</label>
+                          <input type="number" 
+                                 formControlName="tax" 
+                                 min="0" 
+                                 step="0.01"
+                                 placeholder="0.00"
+                                 class="amount-input">
+                          <button type="button" 
+                                  class="btn-copy" 
+                                  (click)="copyToAllMonths('tax', i)"
+                                  title="Copy to all months">
+                            📋
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <!-- Yearly Summary -->
+          <div class="yearly-summary">
+            <h5>📊 {{ getRequestedYear() }} Annual Summary</h5>
+            <div class="summary-grid">
+              <div class="summary-item">
+                <span class="summary-label">Total Basic Pension:</span>
+                <span class="summary-amount positive">Rs. {{ yearlyTotals.basic | number:'1.2-2' }}</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">Total Allowances:</span>
+                <span class="summary-amount positive">Rs. {{ yearlyTotals.allowances | number:'1.2-2' }}</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">Total Bonus:</span>
+                <span class="summary-amount positive">Rs. {{ yearlyTotals.bonus | number:'1.2-2' }}</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">Total Deductions:</span>
+                <span class="summary-amount negative">Rs. {{ yearlyTotals.deductions | number:'1.2-2' }}</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">Total Tax:</span>
+                <span class="summary-amount negative">Rs. {{ yearlyTotals.tax | number:'1.2-2' }}</span>
+              </div>
+              <div class="summary-divider"></div>
+              <div class="summary-item total">
+                <span class="summary-label">Net Annual Income:</span>
+                <span class="summary-amount total-amount">Rs. {{ yearlyTotals.net | number:'1.2-2' }}</span>
+              </div>
+              <div class="summary-item average">
+                <span class="summary-label">Average Monthly:</span>
+                <span class="summary-amount average-amount">Rs. {{ (yearlyTotals.net / 12) | number:'1.2-2' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="comments">Review Comments</label>
+          <textarea 
+            id="comments" 
+            formControlName="comments" 
+            rows="4"
+            placeholder="Add any comments or reasons for your decision..."
+          ></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="closeReviewModal()">
+            Cancel
+          </button>
+          <button type="submit" class="btn-submit" [disabled]="!isFormValid() || isReviewing">
+            {{ isReviewing ? 'Submitting...' : 'Submit Review' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
