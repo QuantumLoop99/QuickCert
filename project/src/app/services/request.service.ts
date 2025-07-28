@@ -46,12 +46,14 @@ export class RequestService {
     }, { headers: this.getHeaders() });
   }
 
+
   downloadDocument(id: number): Observable<Blob> {
     return this.http.get(`${this.apiUrl}/requests/${id}/document`, {
       headers: this.getHeaders(),
       responseType: 'blob'
     });
   }
+
 
   submitFeedback(requestId: number, rating: number, comments: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/feedback`, {

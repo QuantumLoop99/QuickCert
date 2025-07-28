@@ -760,7 +760,7 @@ async function generateIncomeStatementPDF(request_id) {
 
     const verificationCode = `QC${request.id}${Date.now().toString().slice(-4)}`;
 
-    // 🔧 Use enriched request for ds/gn office names
+    // Get enriched request data with location names
     const [requestRows] = await db.promise().query(
       `SELECT 
         r.*, 
@@ -776,7 +776,7 @@ async function generateIncomeStatementPDF(request_id) {
     );
 
     if (!requestRows.length) throw new Error('Joined data not found');
-    const enrichedRequest = requestRows[0]; // ✅ This has ds_office_name and gn_division_name
+    const enrichedRequest = requestRows[0];
 
     const templateData = {
       citizenName: request.name,
@@ -792,6 +792,7 @@ async function generateIncomeStatementPDF(request_id) {
       referenceNo: `QC${request.id.toString().padStart(6, '0')}`,
     };
 
+    // Update verification code
     await db.promise().query('UPDATE requests SET verification_code = ? WHERE id = ?', [verificationCode, request.id]);
 
     if (isWorking) {
@@ -859,8 +860,10 @@ async function generateIncomeStatementPDF(request_id) {
         text ? text.charAt(0).toUpperCase() + text.slice(1).toLowerCase() : '';
     }
 
+    // Generate HTML content
     const htmlContent = await ejs.renderFile(templatePath, templateData);
 
+    // Generate PDF using Puppeteer
     const browser = await puppeteer.launch({
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox']
@@ -869,7 +872,7 @@ async function generateIncomeStatementPDF(request_id) {
     const page = await browser.newPage();
     await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
 
-    const pdfBuffer = await page.pdf({
+    let pdfBuffer = await page.pdf({
       format: 'A4',
       landscape: !isWorking,
       printBackground: true,
@@ -878,23 +881,36 @@ async function generateIncomeStatementPDF(request_id) {
 
     await browser.close();
 
-    const documentsDir = path.join(__dirname, 'documents');
-    if (!fs.existsSync(documentsDir)) {
-      fs.mkdirSync(documentsDir, { recursive: true });
+    // Save PDF data directly to database instead of file system
+    const filename = `income_statement_${request.id}_${Date.now()}.pdf`;
+    const fileSize = pdfBuffer.length;
+
+    const isBuffer = Buffer.isBuffer(pdfBuffer);
+    if (!isBuffer) {
+      console.warn('Warning: pdfBuffer is not a Buffer. Fixing it...');
+      pdfBuffer = Buffer.from(pdfBuffer);
     }
 
-    const filename = `income_statement_${request.id}.pdf`;
-    const filepath = path.join(documentsDir, filename);
-    fs.writeFileSync(filepath, pdfBuffer);
+    await db.promise().query(
+      `UPDATE requests SET 
+        \`document_data\` = ?, 
+        \`document_filename\` = ?, 
+        \`document_size\` = ?,
+        \`document_generated_at\` = NOW()
+      WHERE id = ?`,
+      [pdfBuffer, filename, fileSize, request.id]
+    );
 
-    await db.promise().query('UPDATE requests SET document_path = ? WHERE id = ?', [filename, request.id]);
 
-    console.log('PDF generated successfully:', filename);
+    console.log('PDF generated and saved to database successfully:', filename, 'Size:', fileSize, 'bytes');
+    return { filename, size: fileSize };
+
   } catch (error) {
     console.error('PDF generation failed:', error);
     throw error;
   }
 }
+
 
 
 
@@ -1108,37 +1124,65 @@ app.post('/api/verify-certificate', async (req, res) => {
 });
 
 
-app.get('/api/requests/:id/document', async (req, res) => {
+app.get('/api/requests/:id/document', authenticateToken, async (req, res) => {
   try {
     const requestId = req.params.id;
 
-    const [rows] = await db.promise().query(
-      'SELECT document_path FROM requests WHERE id = ?',
-      [requestId]
-    );
+    // Verify user owns this request or is an officer
+    let query = '';
+    let params = [];
+
+    if (req.user.userType === 'citizen') {
+      query = `SELECT document_data, document_filename, document_size, status 
+               FROM requests 
+               WHERE id = ? AND user_id = ?`;
+      params = [requestId, req.user.userId];
+    } else if (req.user.userType === 'gn_officer' || req.user.userType === 'ds_officer') {
+      query = `SELECT document_data, document_filename, document_size, status 
+               FROM requests 
+               WHERE id = ?`;
+      params = [requestId];
+    } else {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    const [rows] = await db.promise().query(query, params);
 
     if (!rows.length) {
-      return res.status(404).json({ error: 'Request not found' });
+      return res.status(404).json({ error: 'Request not found or access denied' });
     }
 
-    const docPath = rows[0].document_path;
+    const document = rows[0];
 
-    if (!docPath) {
-      return res.status(404).json({ error: 'Document not generated yet' });
+    // Check if request is approved
+    if (document.status !== 'ds_approved') {
+      return res.status(400).json({ error: 'Document not available. Request must be approved first.' });
     }
 
-    const filePath = path.join(__dirname, 'documents', docPath);
-
-    if (!fs.existsSync(filePath)) {
-      return res.status(404).json({ error: 'Document file not found on server' });
+    // Check if document exists
+    if (!document.document_data) {
+      return res.status(404).json({ error: 'Document not generated yet. Please try again later.' });
     }
 
-    res.download(filePath, docPath);
-  } catch (err) {
-    console.error('Error in document download:', err);
-    res.status(500).json({ error: 'Failed to download document' });
+    // Set appropriate headers for PDF download
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${document.document_filename}"`);
+    res.setHeader('Content-Length', document.document_size);
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+
+    // Send the PDF data
+    res.send(document.document_data);
+
+    console.log(`Document downloaded: ${document.document_filename} (${document.document_size} bytes)`);
+
+  } catch (error) {
+    console.error('Error in document download:', error);
+    res.status(500).json({ error: 'Failed to download document. Please try again.' });
   }
 });
+
 
 
 

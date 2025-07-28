@@ -58,12 +58,11 @@ export class DocumentViewerComponent implements OnInit {
 
   downloadDocument(): void {
     if (!this.request) return;
-    
+
     this.isDownloading = true;
-    
+
     this.requestService.downloadDocument(this.request.id).subscribe({
       next: (blob) => {
-        // Create download link
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
@@ -72,16 +71,17 @@ export class DocumentViewerComponent implements OnInit {
         link.click();
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
-        
+
         this.isDownloading = false;
         this.showFeedbackForm = true;
       },
-      error: (error) => {
+      error: () => {
         this.isDownloading = false;
         alert('Failed to download document. Please try again.');
       }
     });
   }
+
 
   submitFeedback(): void {
     if (this.feedbackForm.valid && this.request) {
